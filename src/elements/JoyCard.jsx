@@ -1,29 +1,36 @@
-import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import CardOverflow from '@mui/joy/CardOverflow';
-import Chip from '@mui/joy/Chip';
-import Link from '@mui/joy/Link';
-import Typography from '@mui/joy/Typography';
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import * as React from "react";
+import AspectRatio from "@mui/joy/AspectRatio";
+import Button from "@mui/joy/Button";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
+import Chip from "@mui/joy/Chip";
+import Link from "@mui/joy/Link";
+import Typography from "@mui/joy/Typography";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
-export default function ProductCard({photo}) {
+export default function ProductCard({
+  photo,
+  title,
+  description,
+  price,
+  stock,
+  discountPercentage
+}) {
   return (
-    <Card sx={{ width: 320, maxWidth: '100%', boxShadow: 'lg' }}>
+    <Card sx={{ width: 320, maxWidth: "100%", boxShadow: "lg" }}>
       <CardOverflow>
         <AspectRatio sx={{ minWidth: 200 }}>
           <img
             src={photo}
-            srcSet="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286&dpr=2 2x"
+            // srcSet="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286&dpr=2 2x"
             loading="lazy"
             alt=""
           />
         </AspectRatio>
       </CardOverflow>
       <CardContent>
-        <Typography level="body-xs">Bluetooth Headset</Typography>
+        <Typography level="body-xs">{title}</Typography>
         <Link
           href="#product-card"
           fontWeight="md"
@@ -32,22 +39,22 @@ export default function ProductCard({photo}) {
           overlay
           endDecorator={<ArrowOutwardIcon />}
         >
-          Super Rockez A400
+          {description}
         </Link>
 
         <Typography
           level="title-lg"
-          sx={{ mt: 1, fontWeight: 'xl' }}
+          sx={{ mt: 1, fontWeight: "xl" }}
           endDecorator={
             <Chip component="span" size="sm" variant="soft" color="success">
-              Lowest price
+              Lowest price- {price}
             </Chip>
           }
         >
-          2,900 THB
+          {discountPercentage}% Off
         </Typography>
         <Typography level="body-sm">
-          (Only <b>7</b> left in stock!)
+          (Only <b>{stock}</b> left in stock!)
         </Typography>
       </CardContent>
       <CardOverflow>

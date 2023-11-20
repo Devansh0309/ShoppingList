@@ -32,6 +32,11 @@ function Products() {
               {Object.values(categoriesAndBrandsMap[item])?.map((item2) => {
                 return <ProductCard 
                 photo={state?.products[item2]?.images[0]}
+                title={state?.products[item2]?.title}
+                description={state?.products[item2]?.description}
+                price={state?.products[item2]?.price}
+                stock={state?.products[item2]?.stock}
+                discountPercentage={state?.products[item2]?.discountPercentage}
                 key={item+item2}
                 />;
               })}
