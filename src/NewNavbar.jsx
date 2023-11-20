@@ -23,40 +23,39 @@ import MultipleSelectCheckmarks from "./elements/MultipleSelect";
 import { ShoppingContext } from "./Contexts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
-import signIn from "./Auth/SigIn"
+import signIn from "./Auth/SigIn";
 
 function NewNavbar() {
-    console.log(signIn)
-    const [state, dispatch] = useContext(ShoppingContext);
-    const [pages,setPages] = useState([
-        { title: "Categories", logo: <BiSolidCategory /> },
-        { title: "Brands", logo: <BiCategory /> },
-        { title: "Cart", logo: <MdOutlineShoppingCart /> },
-      ])
-    const [userItems,setUserItems] = useState([
-          { title: "Profile", action: () => {} },
-          { title: "Login" },
-          {
-            title: "Logout",
-            action: () => {
-                dispatch({
-                    type: "SetStates",
-                    payload: {
-                      userType:""
-                    },
-                  })
-            },
+  console.log(signIn);
+  const [state, dispatch] = useContext(ShoppingContext);
+  const [pages, setPages] = useState([
+    { title: "Categories", logo: <BiSolidCategory /> },
+    { title: "Brands", logo: <BiCategory /> },
+    { title: "Cart", logo: <MdOutlineShoppingCart /> },
+  ]);
+  const [userItems, setUserItems] = useState([
+    { title: "Profile", action: () => {} },
+    { title: "Login" },
+    {
+      title: "Logout",
+      action: () => {
+        dispatch({
+          type: "SetStates",
+          payload: {
+            userType: "",
           },
-        ])  
+        });
+      },
+    },
+  ]);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  
-//   const [categoriesSelected, setCategoriesSelected] = useState("");
+  //   const [categoriesSelected, setCategoriesSelected] = useState("");
   const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState(
     state?.brands
   );
-//   const [brandsSelected, setBrandsSelected] = useState("");
+  //   const [brandsSelected, setBrandsSelected] = useState("");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -126,6 +125,11 @@ function NewNavbar() {
         console.log("No such document!");
       }
     };
+    const dataFromLocal =
+      typeof window !== "undefined" && window.localStorage
+        ? localStorage.getItem("states")
+        : "{}";
+    if(dataFromLocal){return}
     temp();
   }, []);
 
@@ -172,7 +176,26 @@ function NewNavbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.title}</Typography>
+                  {page?.title === "Categories" ||
+                  page?.title === "Brands" ? null : (
+                    <span>{page.logo}</span>
+                  )}
+                  <span> </span>
+
+                  {page?.title === "Categories" || page?.title === "Brands" ? (
+                    <MultipleSelectCheckmarks
+                      icon={page.logo}
+                      title={page?.title}
+                      brandsForSelectedCategory={brandsForSelectedCategory}
+                      // setCategoriesSelected={setCategoriesSelected}
+                      setBrandsForSelectedCategory={
+                        setBrandsForSelectedCategory
+                      }
+                      // setBrandsSelected={setBrandsSelected}
+                    />
+                  ) : (
+                    <span>{page.title}</span>
+                  )}
                 </MenuItem>
               ))}
             </Menu>
@@ -239,18 +262,26 @@ function NewNavbar() {
             >
               {userItems.map((item) => (
                 <MenuItem key={item.title}>
-                  <Typography textAlign="center" onClick={()=>{
-                    const callActionTodo = ()=>{(item.action)()}
-                    const callActionTodo2 = async()=>{await signIn()}
-                    if(item.title!=="Login"){
-                        callActionTodo()
-                    }
-                    else{
-                        callActionTodo2()
-                    }
-                    
-                    handleCloseUserMenu()
-                    }}>{item.title}</Typography>
+                  <Typography
+                    textAlign="center"
+                    onClick={() => {
+                      const callActionTodo = () => {
+                        item.action();
+                      };
+                      const callActionTodo2 = async () => {
+                        await signIn();
+                      };
+                      if (item.title !== "Login") {
+                        callActionTodo();
+                      } else {
+                        callActionTodo2();
+                      }
+
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    {item.title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

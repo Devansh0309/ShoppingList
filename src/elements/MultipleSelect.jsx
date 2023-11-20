@@ -90,15 +90,6 @@ export default function MultipleSelectCheckmarks({
     }
   }, [item]);
 
-  useEffect(() => {
-    if (
-      state?.mapSelectedBrandsToCategories &&
-      Object.keys(state?.mapSelectedBrandsToCategories).length > 0
-    ) {
-      console.log(state?.mapSelectedBrandsToCategories);
-    }
-  }, [state?.mapSelectedBrandsToCategories]);
-
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>

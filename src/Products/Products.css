@@ -1,0 +1,25 @@
+.products-container{
+    width:90%;
+    margin:auto;
+    margin-top:10px;
+    
+}
+.category-products-container{
+    width:100%;
+    /* margin: auto; */
+    margin-bottom: 50px;
+    padding:auto;
+}
+.category-heading{
+
+}
+.cards-container{
+    width:100%;
+    margin: auto;
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:center;
+    gap:30px;
+    
+}

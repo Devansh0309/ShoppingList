@@ -1,10 +1,8 @@
 import "./App.css";
-// import SignIn from "./Auth/SigIn";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserContexts from "./Contexts";
-import Navbar from "./Navbar";
 import NewNavbar from "./NewNavbar";
-import Products from "./Products";
+import Products from "./Products/Products";
 
 function App() {
   return (
@@ -15,7 +13,6 @@ function App() {
             path="/"
             element={
               <UserContexts>
-                {/* <Navbar/> */}
                 <NewNavbar/>
                 <Products/>
               </UserContexts>
