@@ -26,15 +26,7 @@ function Products() {
         return (
           <div className="category-products-container">
             <h2>Shop by {item}</h2>
-            {
-            // (state?.mapSelectedBrandsToCategories
-            //   ? Object?.values(state?.mapSelectedBrandsToCategories[item])
-            //   : state?.mapBrandsToCategories
-            //   ? Object?.values(state?.mapBrandsToCategories[item])
-            //   : []
-            // )
-            
-            Object.values(categoriesAndBrandsMap[item])?.map((item2) => {
+            {Object.values(categoriesAndBrandsMap[item])?.map((item2) => {
               return <div>{item2}</div>;
             })}
           </div>
