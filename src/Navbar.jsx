@@ -7,7 +7,7 @@ import SignIn from "./Auth/SigIn";
 function Navbar() {
   const [state, dispatch] = useContext(ShoppingContext);
   const [categorySelected,setCategorySelected] = useState("")
-  const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState([])
+  const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState(state?.brands)
   const [brandSelected,setBrandSelected] = useState("")
 
   useEffect(() => {

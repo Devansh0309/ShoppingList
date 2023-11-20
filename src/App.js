@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserContexts from "./Contexts";
 import Navbar from "./Navbar";
 import NewNavbar from "./NewNavbar";
+import Products from "./Products";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <UserContexts>
                 {/* <Navbar/> */}
                 <NewNavbar/>
+                <Products/>
               </UserContexts>
             }
           />

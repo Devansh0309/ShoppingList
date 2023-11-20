@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,17 +20,43 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { BiSolidCategory } from "react-icons/bi";
 import { BiCategory } from "react-icons/bi";
 import MultipleSelectCheckmarks from "./elements/MultipleSelect";
-
-const pages = [
-  { title: "Categories", logo: <BiSolidCategory /> },
-  { title: "Brands", logo: <BiCategory /> },
-  { title: "Cart", logo: <MdOutlineShoppingCart /> },
-];
-const settings = ["Profile", "Login", "Logout"];
+import { ShoppingContext } from "./Contexts";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebaseConfigs/firebaseConfigs";
+import signIn from "./Auth/SigIn"
 
 function NewNavbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+    console.log(signIn)
+    const [state, dispatch] = useContext(ShoppingContext);
+    const [pages,setPages] = useState([
+        { title: "Categories", logo: <BiSolidCategory /> },
+        { title: "Brands", logo: <BiCategory /> },
+        { title: "Cart", logo: <MdOutlineShoppingCart /> },
+      ])
+    const [userItems,setUserItems] = useState([
+          { title: "Profile", action: () => {} },
+          { title: "Login" },
+          {
+            title: "Logout",
+            action: () => {
+                dispatch({
+                    type: "SetStates",
+                    payload: {
+                      userType:""
+                    },
+                  })
+            },
+          },
+        ])  
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  
+//   const [categoriesSelected, setCategoriesSelected] = useState("");
+  const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState(
+    state?.brands
+  );
+//   const [brandsSelected, setBrandsSelected] = useState("");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,6 +72,62 @@ function NewNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    const docRef = doc(db, "products", "l8FKZZhmlnEbGTnWy65n");
+
+    const temp = async () => {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        let products = [];
+        products = data["$return_value"];
+        let categories = [];
+        let brands = [];
+        for (let i = 0; i < products.length; i++) {
+          categories[i] = products[i].category;
+          brands[i] = products[i].brand;
+        }
+        const uniqueCategories = Array.from(new Set(categories));
+        const uniqueBrands = Array.from(new Set(brands));
+        let mapBrandsToCategories = {};
+
+        for (let i = 0; i < uniqueCategories.length; i++) {
+          let categoryBrands = [];
+          for (let j = 0; j < products.length; j++) {
+            if (products[j]["category"] === uniqueCategories[i]) {
+              categoryBrands.push(products[j]["brand"]);
+            }
+          }
+          // let categoryBrands=products.filter((item)=>{
+          //     if(item["category"]===uniqueCategories[i]){
+          //         const brand=item.brand
+          //         console.log(brand)
+          //         return brand
+          //     }
+          // })
+          const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
+          // console.log(categoryBrands)
+          mapBrandsToCategories[uniqueCategories[i]] = uniqueCategoryBrands;
+        }
+
+        dispatch({
+          type: "SetStates",
+          payload: {
+            products: products,
+            categories: uniqueCategories,
+            brands: uniqueBrands,
+            mapBrandsToCategories: mapBrandsToCategories,
+          },
+        });
+        console.log("Document data:", products);
+      } else {
+        // docSnap.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    };
+    temp();
+  }, []);
 
   return (
     <AppBar position="static">
@@ -117,7 +199,14 @@ function NewNavbar() {
                 <span> </span>
 
                 {page?.title === "Categories" || page?.title === "Brands" ? (
-                  <MultipleSelectCheckmarks icon={page.logo} title={page?.title}/>
+                  <MultipleSelectCheckmarks
+                    icon={page.logo}
+                    title={page?.title}
+                    brandsForSelectedCategory={brandsForSelectedCategory}
+                    // setCategoriesSelected={setCategoriesSelected}
+                    setBrandsForSelectedCategory={setBrandsForSelectedCategory}
+                    // setBrandsSelected={setBrandsSelected}
+                  />
                 ) : (
                   <span>{page.title}</span>
                 )}
@@ -148,9 +237,20 @@ function NewNavbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {userItems.map((item) => (
+                <MenuItem key={item.title}>
+                  <Typography textAlign="center" onClick={()=>{
+                    const callActionTodo = ()=>{(item.action)()}
+                    const callActionTodo2 = async()=>{await signIn()}
+                    if(item.title!=="Login"){
+                        callActionTodo()
+                    }
+                    else{
+                        callActionTodo2()
+                    }
+                    
+                    handleCloseUserMenu()
+                    }}>{item.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>

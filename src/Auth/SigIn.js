@@ -6,11 +6,11 @@ import {
 } from "../firebaseConfigs/firebaseConfigs";
 import { ShoppingContext } from "../Contexts";
 
-function SignIn() {
+async function SignIn() {
   // console.log(ShoppingContext)
   const [state, dispatch ] = useContext(ShoppingContext);
   const provider = new GoogleAuthProvider();
-  const signIn = async()=>{
+  // const signIn = async()=>{
     await signInWithPopup(auth, provider)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -42,17 +42,19 @@ function SignIn() {
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
     });
-  }
-  return (
-    <div>
-      <button
-        onClick={() => {
-          signIn()
-        }}
-      >
-        SignIn
-      </button>
-    </div>
-  );
+  // }
+  // signIn()
+  // signIn()
+  // return (
+  //   <div>
+  //     <button
+  //       onClick={() => {
+  //         signIn()
+  //       }}
+  //     >
+  //       SignIn
+  //     </button>
+  //   </div>
+  // );
 }
 export default SignIn
