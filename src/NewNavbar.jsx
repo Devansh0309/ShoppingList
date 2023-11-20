@@ -94,8 +94,8 @@ function NewNavbar() {
         for (let i = 0; i < uniqueCategories.length; i++) {
           let categoryBrands = [];
           for (let j = 0; j < products.length; j++) {
-            if (products[j]["category"] === uniqueCategories[i]) {
-              categoryBrands.push(products[j]["brand"]);
+            if (products[j]?.category === uniqueCategories[i]) {
+              categoryBrands.push(products[j]?.id);
             }
           }
           // let categoryBrands=products.filter((item)=>{
@@ -105,9 +105,9 @@ function NewNavbar() {
           //         return brand
           //     }
           // })
-          const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
+        //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
           // console.log(categoryBrands)
-          mapBrandsToCategories[uniqueCategories[i]] = uniqueCategoryBrands;
+          mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
         }
 
         dispatch({
@@ -125,11 +125,11 @@ function NewNavbar() {
         console.log("No such document!");
       }
     };
-    const dataFromLocal =
-      typeof window !== "undefined" && window.localStorage
-        ? localStorage.getItem("states")
-        : "{}";
-    if(dataFromLocal){return}
+    // const dataFromLocal =
+    //   typeof window !== "undefined" && window.localStorage
+    //     ? localStorage.getItem("states")
+    //     : "{}";
+    // if(dataFromLocal){return}
     temp();
   }, []);
 
@@ -217,13 +217,13 @@ function NewNavbar() {
               >
                 {page?.title === "Categories" ||
                 page?.title === "Brands" ? null : (
-                  <span>{page.logo}</span>
+                  <span>{page?.logo}</span>
                 )}
                 <span> </span>
 
                 {page?.title === "Categories" || page?.title === "Brands" ? (
                   <MultipleSelectCheckmarks
-                    icon={page.logo}
+                    icon={page?.logo}
                     title={page?.title}
                     brandsForSelectedCategory={brandsForSelectedCategory}
                     // setCategoriesSelected={setCategoriesSelected}
@@ -231,7 +231,7 @@ function NewNavbar() {
                     // setBrandsSelected={setBrandsSelected}
                   />
                 ) : (
-                  <span>{page.title}</span>
+                  <span>{page?.title}</span>
                 )}
               </Button>
             ))}

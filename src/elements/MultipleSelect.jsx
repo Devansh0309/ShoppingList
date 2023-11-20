@@ -43,17 +43,23 @@ export default function MultipleSelectCheckmarks({
     if (title === "Categories") {
       let brandsForCategory = [];
       for (let i = 0; i < item.length; i++) {
+        let brandsForId=[]
+        for(let j of state?.mapBrandsToCategories[item[i]]){
+            brandsForId.push(state?.products[j]?.brand)
+        }
         brandsForCategory = [
           ...brandsForCategory,
-          ...state?.mapBrandsToCategories[item[i]],
+          ...brandsForId,
         ];
       }
+
       let mapSelectedBrandsForCategories = {};
       const brandsForCategoriesMap = state?.mapBrandsToCategories;
       for (let i = 0; i < item.length; i++) {
         mapSelectedBrandsForCategories[item[i]] =
           brandsForCategoriesMap[item[i]];
       }
+
       dispatch({
         type: "SetStates",
         payload: {
@@ -61,21 +67,34 @@ export default function MultipleSelectCheckmarks({
           mapSelectedBrandsToCategories: mapSelectedBrandsForCategories,
         },
       });
-      setBrandsForSelectedCategory(brandsForCategory);
+      setBrandsForSelectedCategory(Array.from(new Set(brandsForCategory)));
     } else {
       let mapSelectedBrandsForCategories = {};
       const brandsForCategoriesMap = state?.mapBrandsToCategories;
-      for (let key in brandsForCategoriesMap) {
-        for (let i = 0; i < item.length; i++) {
-          if (brandsForCategoriesMap[key]?.includes(item[i])) {
+      for (let key in brandsForCategoriesMap) { //key is category
+
+        let brandsForId=[]//brandsForCategory is array for unique brands for a category-key
+        for(let j of brandsForCategoriesMap[key]){
+            brandsForId.push(state?.products[j]?.brand)
+        }
+        brandsForId=Array.from(new Set(brandsForId))
+
+        for (let i = 0; i < item.length; i++) { //item is arr of selected brands
+          if (brandsForId?.includes(item[i])) {
+            let IdForCategoryBrand=[]
+            for(let k=0;k<state?.products?.length;k++){  // k is id of product
+                if(state?.products[k]?.category === key && state?.products[k]?.brand === item[i]){
+                    IdForCategoryBrand.push(k) // k is id of product having category-key and brand-item[i]
+                }
+            }
             // console.log(key,item)
             if (mapSelectedBrandsForCategories[key]?.length > 0) {
               mapSelectedBrandsForCategories[key] = [
                 ...mapSelectedBrandsForCategories[key],
-                item[i],
+                ...IdForCategoryBrand,
               ];
             } else {
-              mapSelectedBrandsForCategories[key] = [item[i]];
+              mapSelectedBrandsForCategories[key] = [...IdForCategoryBrand];
             }
           }
         }

@@ -9,13 +9,13 @@ import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 
-export default function ProductCard() {
+export default function ProductCard({photo}) {
   return (
     <Card sx={{ width: 320, maxWidth: '100%', boxShadow: 'lg' }}>
       <CardOverflow>
         <AspectRatio sx={{ minWidth: 200 }}>
           <img
-            src="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286"
+            src={photo}
             srcSet="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286&dpr=2 2x"
             loading="lazy"
             alt=""

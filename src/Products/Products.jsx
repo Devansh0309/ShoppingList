@@ -31,7 +31,7 @@ function Products() {
             <div className="cards-container">
               {Object.values(categoriesAndBrandsMap[item])?.map((item2) => {
                 return <ProductCard 
-                // photo={}
+                photo={state?.products[item2]?.images[0]}
                 key={item+item2}
                 />;
               })}
