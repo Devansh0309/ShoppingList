@@ -66,13 +66,6 @@ function Navbar() {
     temp();
   }, []);
 
-  useEffect(()=>{
-    if(categorySelected && brandsForSelectedCategory.length>0){
-        console.log(categorySelected,brandsForSelectedCategory)
-    }
-    
-  },[categorySelected,brandsForSelectedCategory])
-
   return (
     <div className="nav-container">
       <div className="company-logo">Company Logo</div>
