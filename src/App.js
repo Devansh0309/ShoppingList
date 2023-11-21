@@ -4,7 +4,7 @@ import UserContexts from "./Contexts";
 import NewNavbar from "./NewNavbar";
 import Products from "./Products/Products";
 import TemporaryDrawer from "./elements/Drawer";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
             path="/profile"
             element={
               <UserContexts>
-                <NewNavbar/>
+                {/* <NewNavbar/> */}
                 <Profile/>
               </UserContexts>
             }
