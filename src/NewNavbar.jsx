@@ -26,7 +26,7 @@ import { db } from "./firebaseConfigs/firebaseConfigs";
 import signIn from "./Auth/SigIn";
 
 function NewNavbar() {
-  console.log(signIn);
+  // console.log(signIn);
   const [state, dispatch] = useContext(ShoppingContext);
   const [pages, setPages] = useState([
     { title: "Categories", logo: <BiSolidCategory /> },
@@ -55,6 +55,7 @@ function NewNavbar() {
   const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState(
     state?.brands
   );
+  const [totalCartItems, setTotalCartItems] = useState(0)
   //   const [brandsSelected, setBrandsSelected] = useState("");
 
   const handleOpenNavMenu = (event) => {
@@ -132,6 +133,16 @@ function NewNavbar() {
     // if(dataFromLocal){return}
     temp();
   }, []);
+
+  useEffect(()=>{
+    // console.log("inside 2nd useEffect in navbar")
+    let cartItems= state?.cartItems
+    let sum=0
+    for(let item in cartItems){
+      sum = sum+cartItems[item]
+    }
+    setTotalCartItems(sum)
+  },[state?.cartItems, state?.billAmount])
 
   return (
     <AppBar position="fixed">
@@ -231,7 +242,14 @@ function NewNavbar() {
                     // setBrandsSelected={setBrandsSelected}
                   />
                 ) : (
-                  <span>{page?.title}</span>
+                  <span style={{border:"1px solid red", background:"white", color:"black", borderRadius:"10px"}}>
+                    <div>
+                      {totalCartItems} items
+                    </div>
+                    <div>
+                      Rs. {state?.billAmount}
+                    </div>
+                  </span>
                 )}
               </Button>
             ))}

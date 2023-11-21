@@ -9,7 +9,7 @@ const dataFromLocal =
 const states = JSON.parse(dataFromLocal);
 
 const initialState = {
-  userType: states ? states.userType : "customer",
+  userType: states ? states.userType : "",
   products: states ? states.products : [],
   categories: states ? states.categories : [],
   brands: states ? states.brands : [],
@@ -19,6 +19,8 @@ const initialState = {
   mapSelectedBrandsToCategories: states
     ? states.mapSelectedBrandsToCategories
     : {},
+  cartItems: states ? states.cartItems : {},
+  billAmount: states ? states.billAmount : 0
 };
 function reducer(state, action) {
   switch (action.type) {

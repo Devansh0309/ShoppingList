@@ -8,6 +8,19 @@ function Products() {
   const [categoriesAndBrandsMap, setCategoriesAndBrandsMap] = useState([]);
 
   useEffect(() => {
+    if(state?.cartItems && Object.keys(state?.cartItems)?.length===0){
+      let cartItems={}
+      for(let product of state?.products){
+        cartItems[product.id] = 0
+      }
+      dispatch({
+        type: "SetStates",
+        payload: {
+          cartItems: cartItems
+        },
+      })
+    }
+
     if (
       state?.mapSelectedBrandsToCategories &&
       Object.keys(state?.mapSelectedBrandsToCategories)?.length > 0
@@ -19,6 +32,7 @@ function Products() {
     ) {
       setCategoriesAndBrandsMap(state?.mapBrandsToCategories);
     }
+    
   }, [state?.mapBrandsToCategories, state?.mapSelectedBrandsToCategories]);
   return (
     <div className="products-container">
@@ -33,11 +47,15 @@ function Products() {
                 return <ProductCard 
                 photo={state?.products[item2]?.images[0]}
                 title={state?.products[item2]?.title}
+                brand={state?.products[item2]?.brand}
+                
                 description={state?.products[item2]?.description}
                 price={state?.products[item2]?.price}
                 stock={state?.products[item2]?.stock}
                 discountPercentage={state?.products[item2]?.discountPercentage}
+                thumbnail={state?.products[item2]?.thumbnail}
                 key={item+item2}
+                id={item2}
                 />;
               })}
             </div>

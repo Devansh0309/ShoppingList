@@ -23,3 +23,17 @@
     gap:30px;
     
 }
+.bottom-content{
+    width:100%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    column-gap: 10px;
+}
+.bottom-buttons{
+    width:100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 20px;
+}
