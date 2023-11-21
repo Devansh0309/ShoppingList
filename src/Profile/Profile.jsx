@@ -2,18 +2,17 @@ import React from "react";
 import "./Profile.css";
 import { useContext, useState, useEffect } from "react";
 import { ShoppingContext } from "../Contexts";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebaseConfigs/firebaseConfigs";
 
 function Profile() {
   const [state, dispatch] = useContext(ShoppingContext);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const [cartItemsIds, setCartItemsIds] = useState([]);
 
-  
-
   useEffect(() => {
     // console.log("inside 2nd useEffect in navbar")
     if (state?.cartItems && Object.keys(state?.cartItems)?.length > 0) {
-
       let cartItems = state?.cartItems;
       const itemsSelectedIds = Object.keys(cartItems)?.filter((id) => {
         if (state?.cartItems[id] > 0) {
@@ -56,7 +55,7 @@ function Profile() {
                           billAmount =
                             billAmount -
                             cartItems[item] * state?.products[item]?.price;
-                          
+
                           cartItems[item] = 0;
 
                           dispatch({
@@ -85,9 +84,48 @@ function Profile() {
       <div className="bottom-content">
         <div className="bill-info">Total: Rs.{state?.billAmount}</div>
         {"|"}
-        <div className="purchase-items" onClick={()=>{
-          
-        }}>Proceed to Checkout</div>
+        <div
+          className="purchase-items"
+          onClick={() => {
+            if (state?.userType === "customer") {
+              const docRef = doc(db, "products", "l8FKZZhmlnEbGTnWy65n");
+
+              const temp = async () => {
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                  const data = docSnap.data();
+                  let products = [];
+                  products = data["$return_value"];
+                  let billAmount = state?.billAmount;
+                  let cartItems = state?.cartItems;
+                  for (let item of cartItemsIds) {
+                    billAmount =
+                      billAmount -
+                      cartItems[item] * state?.products[item]?.price;
+                    cartItems[item] = 0;
+
+                    let stock = products[item - 1]?.stock;
+                    console.log(stock, "line 101 purchase in profile");
+                    products[item - 1].stock = stock - state?.cartItems[item];
+                  }
+                  
+                  await updateDoc(docRef, {
+                    products: products,
+                  }).then(()=>dispatch({
+                    type: "SetStates",
+                    payload: {
+                      cartItems: cartItems,
+                      billAmount: billAmount,
+                    },
+                  }))
+                }
+              };
+              temp();
+            }
+          }}
+        >
+          Proceed to Checkout
+        </div>
       </div>
     </div>
   );
