@@ -5,12 +5,15 @@ import {
   GoogleAuthProvider,
 } from "../firebaseConfigs/firebaseConfigs";
 import { ShoppingContext } from "../Contexts";
+import { Typography } from "@mui/material";
 
-async function SignIn() {
+function SignIn({handleCloseUserMenu}) {
   // console.log(ShoppingContext)
   const [state, dispatch ] = useContext(ShoppingContext);
   const provider = new GoogleAuthProvider();
-  // const signIn = async()=>{
+
+  
+  const signIn = async()=>{
     await signInWithPopup(auth, provider)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -18,7 +21,8 @@ async function SignIn() {
       const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user.uid;
-      if (user === "g23bixOpt8YpSFI6emQTuie8SFo1") {
+      console.log(user)
+      if (state?.admin?.includes(user)) {
         dispatch({
           type: "SetStates",
           payload: { userType: "admin" },
@@ -42,19 +46,19 @@ async function SignIn() {
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
     });
-  // }
-  // signIn()
-  // signIn()
-  // return (
-  //   <div>
-  //     <button
-  //       onClick={() => {
-  //         signIn()
-  //       }}
-  //     >
-  //       SignIn
-  //     </button>
-  //   </div>
-  // );
+  }
+  return (
+    <div>
+      <Typography
+      textAlign="center"
+        onClick={() => {
+          signIn()
+          handleCloseUserMenu()
+        }}
+      >
+        Login
+      </Typography>
+    </div>
+  );
 }
 export default SignIn

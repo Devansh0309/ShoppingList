@@ -20,7 +20,17 @@ const initialState = {
     ? states.mapSelectedBrandsToCategories
     : {},
   cartItems: states ? states.cartItems : {},
-  billAmount: states ? states.billAmount : 0
+  billAmount: states ? states.billAmount : 0,
+  admin: states ? states.admin : [],
+  toggleDrawer: states ? states.toggleDrawer : null,
+  drawerState: states
+    ? states.drawerState
+    : {
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+      },
 };
 function reducer(state, action) {
   switch (action.type) {

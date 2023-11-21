@@ -11,11 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-// import AdbIcon from '@mui/icons-material/Adb';
 import logo from "./e-commerce-logo.avif";
-import cart from "./cart.svg";
-import categories from "./categories-grey.svg";
-import profile from "./profile-grey.svg";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { BiSolidCategory } from "react-icons/bi";
 import { BiCategory } from "react-icons/bi";
@@ -23,18 +19,20 @@ import MultipleSelectCheckmarks from "./elements/MultipleSelect";
 import { ShoppingContext } from "./Contexts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
-import signIn from "./Auth/SigIn";
+import SignIn from "./Auth/SigIn";
+import { useNavigate } from "react-router-dom";
 
 function NewNavbar() {
   // console.log(signIn);
   const [state, dispatch] = useContext(ShoppingContext);
+  const navigate = useNavigate();
   const [pages, setPages] = useState([
     { title: "Categories", logo: <BiSolidCategory /> },
     { title: "Brands", logo: <BiCategory /> },
     { title: "Cart", logo: <MdOutlineShoppingCart /> },
   ]);
   const [userItems, setUserItems] = useState([
-    { title: "Profile", action: () => {} },
+    { title: "Profile", action: navigate },
     { title: "Login" },
     {
       title: "Logout",
@@ -55,7 +53,7 @@ function NewNavbar() {
   const [brandsForSelectedCategory, setBrandsForSelectedCategory] = useState(
     state?.brands
   );
-  const [totalCartItems, setTotalCartItems] = useState(0)
+  const [totalCartItems, setTotalCartItems] = useState(0);
   //   const [brandsSelected, setBrandsSelected] = useState("");
 
   const handleOpenNavMenu = (event) => {
@@ -72,6 +70,31 @@ function NewNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  // useEffect(() => {
+  //   if (!state?.toggleDrawer) {
+  //     console.log("toggle-drawer");
+  //     const toggleDrawer = (anchor, open) => (event) => {
+  //       if (
+  //         event.type === "keydown" &&
+  //         (event.key === "Tab" || event.key === "Shift")
+  //       ) {
+  //         return;
+  //       }
+  //       dispatch({
+  //         type: "SetStates",
+  //         payload: {
+  //           drawerState: { ...state?.drawerState, [anchor]: open },
+  //         },
+  //       });
+  //     };
+  //     dispatch({
+  //       type: "SetStates",
+  //       payload: {
+  //         toggleDrawer: toggleDrawer,
+  //       },
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
     const docRef = doc(db, "products", "l8FKZZhmlnEbGTnWy65n");
@@ -106,7 +129,7 @@ function NewNavbar() {
           //         return brand
           //     }
           // })
-        //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
+          //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
           // console.log(categoryBrands)
           mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
         }
@@ -131,18 +154,35 @@ function NewNavbar() {
     //     ? localStorage.getItem("states")
     //     : "{}";
     // if(dataFromLocal){return}
+
+    const docRef2 = doc(db, "products", "admin");
+
+    const temp2 = async () => {
+      const docSnap = await getDoc(docRef2);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        dispatch({
+          type: "SetStates",
+          payload: {
+            admin: data?.email,
+          },
+        });
+      }
+    };
+
     temp();
+    temp2();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     // console.log("inside 2nd useEffect in navbar")
-    let cartItems= state?.cartItems
-    let sum=0
-    for(let item in cartItems){
-      sum = sum+cartItems[item]
+    let cartItems = state?.cartItems;
+    let sum = 0;
+    for (let item in cartItems) {
+      sum = sum + cartItems[item];
     }
-    setTotalCartItems(sum)
-  },[state?.cartItems, state?.billAmount])
+    setTotalCartItems(sum);
+  }, [state?.cartItems, state?.billAmount]);
 
   return (
     <AppBar position="fixed">
@@ -187,12 +227,6 @@ function NewNavbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  {page?.title === "Categories" ||
-                  page?.title === "Brands" ? null : (
-                    <span>{page.logo}</span>
-                  )}
-                  <span> </span>
-
                   {page?.title === "Categories" || page?.title === "Brands" ? (
                     <MultipleSelectCheckmarks
                       icon={page.logo}
@@ -205,7 +239,24 @@ function NewNavbar() {
                       // setBrandsSelected={setBrandsSelected}
                     />
                   ) : (
-                    <span>{page.title}</span>
+                    <div
+                      style={{
+                        border: "1px solid red",
+                        background: "white",
+                        color: "black",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "10px",
+                        padding: "5px",
+                      }}
+                    >
+                      <span>{page?.logo}</span>
+                      <span>
+                        <div>{totalCartItems} items</div>
+                        <div>Rs. {state?.billAmount}</div>
+                      </span>
+                    </div>
                   )}
                 </MenuItem>
               ))}
@@ -226,12 +277,6 @@ function NewNavbar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "flex" }}
               >
-                {page?.title === "Categories" ||
-                page?.title === "Brands" ? null : (
-                  <span>{page?.logo}</span>
-                )}
-                <span> </span>
-
                 {page?.title === "Categories" || page?.title === "Brands" ? (
                   <MultipleSelectCheckmarks
                     icon={page?.logo}
@@ -242,14 +287,25 @@ function NewNavbar() {
                     // setBrandsSelected={setBrandsSelected}
                   />
                 ) : (
-                  <span style={{border:"1px solid red", background:"white", color:"black", borderRadius:"10px"}}>
-                    <div>
-                      {totalCartItems} items
-                    </div>
-                    <div>
-                      Rs. {state?.billAmount}
-                    </div>
-                  </span>
+                  <div
+                    style={{
+                      border: "1px solid red",
+                      background: "white",
+                      color: "black",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "10px",
+                      padding: "5px",
+                    }}
+                    onClick={() => {}}
+                  >
+                    <span>{page?.logo}</span>
+                    <span>
+                      <div>{totalCartItems} items</div>
+                      <div>Rs. {state?.billAmount}</div>
+                    </span>
+                  </div>
                 )}
               </Button>
             ))}
@@ -280,26 +336,36 @@ function NewNavbar() {
             >
               {userItems.map((item) => (
                 <MenuItem key={item.title}>
-                  <Typography
-                    textAlign="center"
-                    onClick={() => {
-                      const callActionTodo = () => {
-                        item.action();
-                      };
-                      const callActionTodo2 = async () => {
-                        await signIn();
-                      };
-                      if (item.title !== "Login") {
-                        callActionTodo();
-                      } else {
-                        callActionTodo2();
-                      }
-
-                      handleCloseUserMenu();
-                    }}
-                  >
-                    {item.title}
-                  </Typography>
+                  {item?.title === "Login" ? (
+                    state?.userType ? null : (
+                      <SignIn handleCloseUserMenu={handleCloseUserMenu} />
+                    )
+                  ) : state?.userType ? (
+                    item?.title === "Profile" ? (
+                      <Typography
+                        textAlign="center"
+                        onClick={() => {
+                          item.action("/profile");
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        textAlign="center"
+                        onClick={() => {
+                          const callActionTodo = () => {
+                            item.action();
+                          };
+                          callActionTodo();
+                          handleCloseUserMenu();
+                          navigate("/")
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
+                    )
+                  ) : null}
                 </MenuItem>
               ))}
             </Menu>
