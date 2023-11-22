@@ -32,7 +32,7 @@ function NewNavbar() {
     { title: "Cart", logo: <MdOutlineShoppingCart /> },
   ]);
   const [userItems, setUserItems] = useState([
-    { title: "Profile", action: navigate },
+    { title: "Profile", action: window.open },
     { title: "Login" },
     {
       title: "Logout",
@@ -346,7 +346,7 @@ function NewNavbar() {
                       <Typography
                         textAlign="center"
                         onClick={() => {
-                          item.action("/profile");
+                          window.open("/profile", 'rel=noopener noreferrer')
                         }}
                       >
                         {item.title}
@@ -360,7 +360,7 @@ function NewNavbar() {
                           };
                           callActionTodo();
                           handleCloseUserMenu();
-                          navigate("/");
+                          navigate("/",);
                         }}
                       >
                         {item.title}

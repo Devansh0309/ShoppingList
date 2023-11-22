@@ -93,33 +93,43 @@ function Profile() {
               const temp = async () => {
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
+                  console.log("line 96")
                   const data = docSnap.data();
                   let products = [];
                   products = data["$return_value"];
                   let billAmount = state?.billAmount;
                   let cartItems = state?.cartItems;
                   for (let item of cartItemsIds) {
+                    console.log("bill: ",billAmount,"line 103")
                     billAmount =
                       billAmount -
                       (cartItems[item] * products[item-1]?.price);
-                    cartItems[item] = 0;
-
+                    console.log("bill: ",billAmount,"line 107")
                     let stock = products[item - 1]?.stock;
-                    console.log(stock, "line 101 purchase in profile");
-                    products[item - 1].stock = stock - state?.cartItems[item];
+                    // console.log(stock, "line 101 purchase in profile");
+                    products[item - 1].stock = stock - cartItems[item];
+                    cartItems[item] = 0;
+                    console.log(products[item - 1].stock,cartItems[item],stock, "line 111 purchase in profile");
                   }
-                  
-                  await updateDoc(docRef, {
-                    $return_value: products,
-                  }).then(()=>{
-                    console.log("line 1+15", "doc updated")
-                    dispatch({
+
+                  // console.log(products,"line 113",cartItems)
+                  dispatch({
                     type: "SetStates",
                     payload: {
                       cartItems: cartItems,
                       billAmount: billAmount,
-                    },
-                  })})
+                    }
+                  })
+
+                  await updateDoc(docRef, {
+                    $return_value: products,
+                  }).then(()=>{
+                    console.log("line 115", "doc updated")
+                    
+                    }).catch((err)=>{
+                    console.log("line 123",err)
+                  })
+
                 }
               };
               temp();
