@@ -136,6 +136,14 @@ function NewNavbar() {
           mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
         }
 
+        let cartItems=state?.cartItems
+        let bill=state?.billAmount
+        for(let id in cartItems){
+          if(products[id-1].stock<cartItems[id]){
+            cartItems[id]=products[id-1].stock
+            bill=bill-(cartItems[id]-products[id-1].stock)
+          }
+        }
         dispatch({
           type: "SetStates",
           payload: {
@@ -143,6 +151,8 @@ function NewNavbar() {
             categories: uniqueCategories,
             brands: uniqueBrands,
             mapBrandsToCategories: mapBrandsToCategories,
+            cartItems:cartItems,
+            billAmount:bill
           },
         });
         console.log("Document data:", products);
