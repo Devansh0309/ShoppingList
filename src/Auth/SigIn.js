@@ -43,8 +43,8 @@ function SignIn({ handleCloseUserMenu }) {
               if (!data[user]) {
                 await updateDoc(docRef, {
                   [user]: {
-                    billAmount: state?.billAmount,
-                    cartItems: state?.cartItems,
+                    // billAmount: state?.billAmount,
+                    // cartItems: state?.cartItems,
                     uid: user,
                   },
                 });

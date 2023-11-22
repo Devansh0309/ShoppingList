@@ -46,7 +46,7 @@ function Profile() {
                 return (
                   <div className="product">
                     <div className="product-top-content">
-                      <p>{state?.products[item]?.title}</p>
+                      <p>{state?.products[item-1]?.title}</p>
                       <button
                         className="close-btn"
                         onClick={() => {
@@ -54,7 +54,7 @@ function Profile() {
                           let cartItems = state?.cartItems;
                           billAmount =
                             billAmount -
-                            cartItems[item] * state?.products[item]?.price;
+                            (cartItems[item] * state?.products[item-1]?.price);
 
                           cartItems[item] = 0;
 
@@ -72,7 +72,7 @@ function Profile() {
                     </div>
                     <div className="product-bottom-content">
                       {state?.cartItems[item]}Pieces | Rs.
-                      {state?.products[item]?.price}
+                      {state?.products[item-1]?.price}
                     </div>
                     <hr />
                   </div>
@@ -101,7 +101,7 @@ function Profile() {
                   for (let item of cartItemsIds) {
                     billAmount =
                       billAmount -
-                      cartItems[item] * state?.products[item]?.price;
+                      (cartItems[item] * products[item-1]?.price);
                     cartItems[item] = 0;
 
                     let stock = products[item - 1]?.stock;
@@ -110,14 +110,16 @@ function Profile() {
                   }
                   
                   await updateDoc(docRef, {
-                    products: products,
-                  }).then(()=>dispatch({
+                    $return_value: products,
+                  }).then(()=>{
+                    console.log("line 1+15", "doc updated")
+                    dispatch({
                     type: "SetStates",
                     payload: {
                       cartItems: cartItems,
                       billAmount: billAmount,
                     },
-                  }))
+                  })})
                 }
               };
               temp();

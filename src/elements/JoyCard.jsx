@@ -37,19 +37,9 @@ export default function ProductCard({
         </AspectRatio>
       </CardOverflow>
       <CardContent>
+
         <Typography level="body-xs">{title}</Typography>
-
-        {/* <Link
-          href="#product-card"
-          fontWeight="md"
-          color="neutral"
-          textColor="text.primary"
-          overlay
-          endDecorator={<ArrowOutwardIcon />}
-        >
-          {description}
-        </Link> */}
-
+        <Typography level="body-md">{description}</Typography>
         <Typography
           level="title-lg"
           sx={{ mt: 1, fontWeight: "xl" }}
@@ -61,14 +51,14 @@ export default function ProductCard({
         >
           {discountPercentage}% Off
         </Typography>
-        <Typography level="body-sm">
+        {state?.products[id-1]?.stock>0?<Typography level="body-sm">
           (Only <b>{stock}</b> left in stock!)
-        </Typography>
+        </Typography>:null}
       </CardContent>
-      <div className="bottom-content">
+      <div className="card-bottom-content">
         <img src={thumbnail} alt="" width="50px" height="50px" />
         <Typography level="body-sm">{brand}</Typography>
-        <div className="bottom-buttons">
+        {state?.products[id-1]?.stock>0?<div className="card-bottom-buttons">
         {state?.cartItems[id] > 0 ? (
             <Button
               variant="solid"
@@ -115,7 +105,7 @@ export default function ProductCard({
           >
             +
           </Button>
-        </div>
+        </div>:<h4>Out of Stock</h4>}
       </div>
     </Card>
   );

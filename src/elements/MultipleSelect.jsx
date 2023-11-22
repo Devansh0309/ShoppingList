@@ -45,7 +45,7 @@ export default function MultipleSelectCheckmarks({
       for (let i = 0; i < item.length; i++) {
         let brandsForId=[]
         for(let j of state?.mapBrandsToCategories[item[i]]){
-            brandsForId.push(state?.products[j]?.brand)
+            brandsForId.push(state?.products[j-1]?.brand)
         }
         brandsForCategory = [
           ...brandsForCategory,
@@ -75,15 +75,15 @@ export default function MultipleSelectCheckmarks({
 
         let brandsForId=[]//brandsForCategory is array for unique brands for a category-key
         for(let j of brandsForCategoriesMap[key]){
-            brandsForId.push(state?.products[j]?.brand)
+            brandsForId.push(state?.products[j-1]?.brand)
         }
         brandsForId=Array.from(new Set(brandsForId))
 
         for (let i = 0; i < item.length; i++) { //item is arr of selected brands
           if (brandsForId?.includes(item[i])) {
             let IdForCategoryBrand=[]
-            for(let k=0;k<state?.products?.length;k++){  // k is id of product
-                if(state?.products[k]?.category === key && state?.products[k]?.brand === item[i]){
+            for(let k=1;k<=state?.products?.length;k++){  // k is id of product
+                if(state?.products[k-1]?.category === key && state?.products[k-1]?.brand === item[i]){
                     IdForCategoryBrand.push(k) // k is id of product having category-key and brand-item[i]
                 }
             }

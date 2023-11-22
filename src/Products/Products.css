@@ -23,14 +23,14 @@
     gap:30px;
     
 }
-.bottom-content{
+.card-bottom-content{
     width:100%;
     display: flex;
     justify-content:space-between;
     align-items: center;
     column-gap: 10px;
 }
-.bottom-buttons{
+.card-bottom-buttons{
     width:100%;
     display: flex;
     justify-content: flex-end;

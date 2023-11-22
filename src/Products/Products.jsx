@@ -44,19 +44,18 @@ function Products() {
             </h2>
             <div className="cards-container">
               {Object.values(categoriesAndBrandsMap[item])?.map((item2) => 
-                state?.products[item2-1]?.stock>0?<ProductCard 
-                photo={state?.products[item2-1]?.images[0]}
+                <ProductCard 
+                photo={state?.products[item2]?.images[0]}
                 title={state?.products[item2-1]?.title}
                 brand={state?.products[item2-1]?.brand}
-                
                 description={state?.products[item2-1]?.description}
                 price={state?.products[item2-1]?.price}
                 stock={state?.products[item2-1]?.stock}
                 discountPercentage={state?.products[item2-1]?.discountPercentage}
                 thumbnail={state?.products[item2-1]?.thumbnail}
                 key={item+item2}
-                id={item2-1}
-                />:null
+                id={item2}
+                />
               )}
             </div>
           </div>
