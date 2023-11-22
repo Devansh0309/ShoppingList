@@ -26,7 +26,7 @@ function SignIn({ handleCloseUserMenu }) {
         if (state?.admin?.includes(user)) {
           dispatch({
             type: "SetStates",
-            payload: { userType: "admin" },
+            payload: { userType: "admin", openModal : true },
           });
         } else {
           dispatch({

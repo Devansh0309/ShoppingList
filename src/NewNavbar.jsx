@@ -21,12 +21,14 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
 import SignIn from "./Auth/SigIn";
 import { useNavigate } from "react-router-dom";
+import ProductModal from "./elements/Modal";
 
 function NewNavbar() {
   // console.log(signIn);
   const [state, dispatch] = useContext(ShoppingContext);
   const navigate = useNavigate();
   const [pages, setPages] = useState([
+    // { title: "Add Product", logo: <BiSolidCategory /> },
     { title: "Categories", logo: <BiSolidCategory /> },
     { title: "Brands", logo: <BiCategory /> },
     { title: "Cart", logo: <MdOutlineShoppingCart /> },
@@ -172,7 +174,7 @@ function NewNavbar() {
 
     temp();
     temp2();
-  }, []);
+  }, [state?.products]);
 
   useEffect(() => {
     // console.log("inside 2nd useEffect in navbar")
@@ -313,6 +315,14 @@ function NewNavbar() {
 
           {/* Avatar */}
           <Box sx={{ flexGrow: 0 }}>
+            {state?.userType === "admin" ? (
+              <Button variant="container" onClick={()=>{dispatch({
+                type: "SetStates",
+                payload: {
+                  openModal : true
+                },
+              })}}>Add product</Button>
+            ) : null}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -346,7 +356,7 @@ function NewNavbar() {
                       <Typography
                         textAlign="center"
                         onClick={() => {
-                          window.open("/profile", 'rel=noopener noreferrer')
+                          window.open("/profile", "rel=noopener noreferrer");
                         }}
                       >
                         {item.title}
@@ -360,7 +370,7 @@ function NewNavbar() {
                           };
                           callActionTodo();
                           handleCloseUserMenu();
-                          navigate("/",);
+                          navigate("/");
                         }}
                       >
                         {item.title}

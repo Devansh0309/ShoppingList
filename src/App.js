@@ -5,6 +5,7 @@ import NewNavbar from "./NewNavbar";
 import Products from "./Products/Products";
 import TemporaryDrawer from "./elements/Drawer";
 import Profile from "./Profile/Profile";
+import ProductModal from "./elements/Modal";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <UserContexts>
                 <NewNavbar/>
                 <Products/>
+                <ProductModal/>
                 {/* <TemporaryDrawer/> */}
               </UserContexts>
             }
