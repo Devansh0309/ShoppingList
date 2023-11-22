@@ -13,7 +13,6 @@ function Products() {
     const q = query(collection(db, "products"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       console.log("update in real-time")
-      // const cities = [];
       let admin;let products
       querySnapshot.forEach((doc) => {
         // console.log(doc.id)
@@ -24,7 +23,6 @@ function Products() {
         else if(doc?.id==="l8FKZZhmlnEbGTnWy65n"){
           products=doc?.data()?.$return_value
         }
-        // cities.push(doc.data().name);
       });
 
       dispatch({
