@@ -29,11 +29,11 @@ function Profile() {
     }
   }, [state?.cartItems, state?.billAmount]);
 
-  useEffect(() => {
-    if (cartItemsIds?.length > 0) {
-      console.log(cartItemsIds);
-    }
-  }, [cartItemsIds]);
+  // useEffect(() => {
+  //   if (cartItemsIds?.length > 0) {
+  //     console.log(cartItemsIds);
+  //   }
+  // }, [cartItemsIds]);
   return (
     <div className="user-profile">
       <div className="products-in-cart-and-heading">
@@ -113,19 +113,19 @@ function Profile() {
                   }
 
                   // console.log(products,"line 113",cartItems)
-                  dispatch({
-                    type: "SetStates",
-                    payload: {
-                      cartItems: cartItems,
-                      billAmount: billAmount,
-                    }
-                  })
+                 
 
                   await updateDoc(docRef, {
                     $return_value: products,
                   }).then(()=>{
                     console.log("line 115", "doc updated")
-                    
+                    dispatch({
+                      type: "SetStates",
+                      payload: {
+                        cartItems: cartItems,
+                        billAmount: billAmount,
+                      }
+                    })
                     }).catch((err)=>{
                     console.log("line 123",err)
                   })

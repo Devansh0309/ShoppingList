@@ -31,7 +31,8 @@ const initialState = {
         bottom: false,
         right: false,
       },
-  openModal: states? states.openModal : false
+  openModal: states? states.openModal : false,
+  changesAdded: states? states.changesAdded : false
 };
 function reducer(state, action) {
   switch (action.type) {

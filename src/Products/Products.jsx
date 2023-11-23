@@ -4,34 +4,55 @@ import ProductCard from "../elements/JoyCard";
 import "./Products.css";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfigs/firebaseConfigs";
+import { useRef } from "react";
 
 function Products() {
   const [state, dispatch] = useContext(ShoppingContext);
   const [categoriesAndBrandsMap, setCategoriesAndBrandsMap] = useState([]);
+  const typeOfChange = useRef("");
 
   useEffect(() => {
     const q = query(collection(db, "products"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       console.log("update in real-time")
-      let admin;let products
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.id)
+      let changes = querySnapshot.docChanges()
+      let products
+      changes.forEach((item) => {
+        console.log("snapshot item",item)
+        
+        if(item?.doc?.id==="l8FKZZhmlnEbGTnWy65n"){
 
-        if(doc?.id==="admin"){
-          admin=doc?.data()?.email
+          typeOfChange.current = item?.type
+          products=item?.doc?.data()?.$return_value
+        
         }
-        else if(doc?.id==="l8FKZZhmlnEbGTnWy65n"){
-          products=doc?.data()?.$return_value
-        }
+        
       });
 
-      dispatch({
-        type: "SetStates",
-        payload: {
-          admin:admin,
-          products:products
-        },
-      })
+      if (
+        !state.changesAdded
+      ) {
+        dispatch({
+          type: "SetStates",
+          payload: {
+            changesAdded: true,
+            products:products
+          },
+        })
+      }
+      else if (
+        typeOfChange.current === "modified" ||
+        typeOfChange.current === "removed")
+      {
+        dispatch({
+          type: "SetStates",
+          payload: {
+            products:products
+          },
+        })
+      }
+
+      
 
       // console.log("Current cities in CA: ", cities.join(", "));
     });
@@ -43,6 +64,7 @@ function Products() {
       for (let product of state?.products) {
         cartItems[product.id] = 0;
       }
+      console.log("line 67 in product.jsx cartItems updating")
       dispatch({
         type: "SetStates",
         payload: {
@@ -63,6 +85,7 @@ function Products() {
       setCategoriesAndBrandsMap(state?.mapBrandsToCategories);
     }
   }, [state?.mapBrandsToCategories, state?.mapSelectedBrandsToCategories]);
+  
   return (
     <div className="products-container">
       {Object.keys(categoriesAndBrandsMap)?.map((item) => {
@@ -74,7 +97,7 @@ function Products() {
             <div className="cards-container">
               {Object.values(categoriesAndBrandsMap[item])?.map((item2) => (
                 <ProductCard
-                  photo={state?.products[item2]?.images[0]}
+                  photo={state?.products[item2-1]?.images[0]}
                   title={state?.products[item2 - 1]?.title}
                   brand={state?.products[item2 - 1]?.brand}
                   description={state?.products[item2 - 1]?.description}
