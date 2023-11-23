@@ -99,14 +99,9 @@ function NewNavbar() {
   // }, []);
 
   useEffect(() => {
-    // const docRef = doc(db, "products", "l8FKZZhmlnEbGTnWy65n");
-
-    // const temp = async () => {
-      // const docSnap = await getDoc(docRef);
-      // if (docSnap.exists()) {
-        // const data = docSnap.data();
+    
         let products = state?.products
-        // products = data["$return_value"];
+        
         let categories = [];
         let brands = [];
         for (let i = 0; i < products.length; i++) {
@@ -148,7 +143,7 @@ function NewNavbar() {
         dispatch({
           type: "SetStates",
           payload: {
-            // products: products,
+           
             categories: uniqueCategories,
             brands: uniqueBrands,
             mapBrandsToCategories: mapBrandsToCategories,
@@ -156,13 +151,7 @@ function NewNavbar() {
             billAmount:bill
           },
         });
-        // console.log("Document data:", products);
-      // } 
-      // else {
-      //   // docSnap.data() will be undefined in this case
-      //   console.log("No such document!");
-      // }
-    // };
+       
     // const dataFromLocal =
     //   typeof window !== "undefined" && window.localStorage
     //     ? localStorage.getItem("states")
