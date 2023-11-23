@@ -20,9 +20,8 @@ export default function ProductCard({
   stock,
   discountPercentage,
   thumbnail,
-  id
+  id,
 }) {
- 
   const [state, dispatch] = useContext(ShoppingContext);
   return (
     <Card sx={{ width: 320, maxWidth: "100%", boxShadow: "lg" }}>
@@ -37,7 +36,6 @@ export default function ProductCard({
         </AspectRatio>
       </CardOverflow>
       <CardContent>
-
         <Typography level="body-xs">{title}</Typography>
         <Typography level="body-md">{description}</Typography>
         <Typography
@@ -51,61 +49,67 @@ export default function ProductCard({
         >
           {discountPercentage}% Off
         </Typography>
-        {state?.products[id-1]?.stock>0?<Typography level="body-sm">
-          (Only <b>{stock}</b> left in stock!)
-        </Typography>:null}
+        {state?.products[id - 1]?.stock > 0 ? (
+          <Typography level="body-sm">
+            (Only <b>{stock}</b> left in stock!)
+          </Typography>
+        ) : null}
       </CardContent>
       <div className="card-bottom-content">
         <img src={thumbnail} alt="" width="50px" height="50px" />
         <Typography level="body-sm">{brand}</Typography>
-        {state?.products[id-1]?.stock>0?<div className="card-bottom-buttons">
-        {state?.cartItems[id] > 0 ? (
+        {state?.products[id - 1]?.stock > 0 ? (
+          <div className="card-bottom-buttons">
+            {state?.cartItems[id] > 0 ? (
+              <Button
+                variant="solid"
+                color="danger"
+                size="lg"
+                onClick={() => {
+                  let cartItems = state?.cartItems;
+                  cartItems[id] = cartItems[id] - 1;
+                  let billAmount = state?.billAmount;
+                  billAmount = billAmount - price;
+                  dispatch({
+                    type: "SetStates",
+                    payload: {
+                      cartItems: cartItems,
+                      billAmount: billAmount,
+                    },
+                  });
+                }}
+              >
+                -
+              </Button>
+            ) : null}
+            {state?.cartItems[id] > 0 ? state?.cartItems[id] : null}
             <Button
               variant="solid"
               color="danger"
               size="lg"
-              onClick={() => {
+              onClick={(e) => {
+                // console.log(id, e.target)
                 let cartItems = state?.cartItems;
-                cartItems[id] = cartItems[id] - 1;
-                let billAmount = state?.billAmount
-                billAmount = billAmount-price
-                dispatch({
-                  type: "SetStates",
-                  payload: {
-                    cartItems: cartItems,
-                    billAmount: billAmount
-                  },
-                });
+                let billAmount = state?.billAmount;
+                if (cartItems[id] < stock) {
+                  cartItems[id] = cartItems[id] + 1;
+                  billAmount = billAmount + price;
+                  dispatch({
+                    type: "SetStates",
+                    payload: {
+                      cartItems: cartItems,
+                      billAmount: billAmount,
+                    },
+                  });
+                }
               }}
             >
-              -
+              +
             </Button>
-          ) : null}
-          {state?.cartItems[id] > 0 ?state?.cartItems[id]:null}
-          <Button
-            variant="solid"
-            color="danger"
-            size="lg"
-            onClick={(e) => {
-              // console.log(id, e.target)
-              let cartItems = state?.cartItems;
-              let billAmount = state?.billAmount
-              if (cartItems[id] < stock) {
-                cartItems[id] = cartItems[id] + 1;
-                billAmount = billAmount+price
-                dispatch({
-                  type: "SetStates",
-                  payload: {
-                    cartItems: cartItems,
-                    billAmount: billAmount
-                  },
-                });
-              }
-            }}
-          >
-            +
-          </Button>
-        </div>:<h4>Out of Stock</h4>}
+          </div>
+        ) : (
+          <h4>Out of Stock</h4>
+        )}
       </div>
     </Card>
   );

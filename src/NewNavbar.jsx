@@ -103,7 +103,7 @@ function NewNavbar() {
 
     let categories = [];
     let brands = [];
-    for (let i = 0; i < products.length; i++) {
+    for (let i = 0; i < products?.length; i++) {
       categories[i] = products[i].category;
       brands[i] = products[i].brand;
     }

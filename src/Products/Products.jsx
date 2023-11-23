@@ -52,8 +52,6 @@ function Products() {
         })
       }
 
-      
-
       // console.log("Current cities in CA: ", cities.join(", "));
     });
   }, []);

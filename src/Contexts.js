@@ -52,7 +52,7 @@ function UserContexts(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <ShoppingContext.Provider value={[state, dispatch]}>
-      {props.children}
+      {props?.children}
     </ShoppingContext.Provider>
   );
 }

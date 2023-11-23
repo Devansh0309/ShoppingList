@@ -9,12 +9,12 @@ function Profile() {
   const [state, dispatch] = useContext(ShoppingContext);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const [cartItemsIds, setCartItemsIds] = useState([]);
-
+  console.log("line 12",state?.billAmount)
   useEffect(() => {
     // console.log("inside 2nd useEffect in navbar")
     if (state?.cartItems && Object.keys(state?.cartItems)?.length > 0) {
       let cartItems = state?.cartItems;
-      console.log("line 17", "cartItems updating", state?.cartItems);
+      console.log("line 17", "cartItems updating", state?.cartItems,state?.billAmount);
       const itemsSelectedIds = Object.keys(cartItems)?.filter((id) => {
         if (state?.cartItems[id] > 0) {
           return id;
@@ -98,13 +98,13 @@ function Profile() {
                 // const data = docSnap.data();
                 let products = state?.products;
                 // products = data["$return_value"];
-                let billAmount = state?.billAmount;
+                // let billAmount = state?.billAmount;
                 let cartItems = state?.cartItems;
                 for (let item of cartItemsIds) {
-                  console.log("bill: ", billAmount, "line 103");
-                  billAmount =
-                    billAmount - cartItems[item] * products[item - 1]?.price;
-                  console.log("bill: ", billAmount, "line 107");
+                  // console.log("bill: ", billAmount, "line 103");
+                  // billAmount =
+                    // billAmount - cartItems[item] * products[item - 1]?.price;
+                  // console.log("bill: ", billAmount, "line 107");
                   let stock = products[item - 1]?.stock;
                   // console.log(stock, "line 101 purchase in profile");
                   products[item - 1].stock = stock - cartItems[item];
@@ -116,19 +116,19 @@ function Profile() {
                     "line 111 purchase in profile"
                   );
                 }
-                console.log(
-                  "line 120",
-                  "doc updated",
-                  "cartItems= ",
-                  cartItems,
-                  "billAmount ",
-                  billAmount
-                );
+                // console.log(
+                //   "line 120",
+                //   "doc updated",
+                //   "cartItems= ",
+                //   cartItems,
+                //   "billAmount ",
+                //   billAmount
+                // );
                 // console.log(products,"line 113",cartItems)
                 dispatch({
                   type: "SetStates",
                   payload: {
-                    billAmount: billAmount,
+                    billAmount: 0,
                     cartItems: cartItems,
                   },
                 });

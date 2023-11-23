@@ -130,7 +130,7 @@ export default function MultipleSelectCheckmarks({
             : brandsForSelectedCategory?.length > 0
             ? brandsForSelectedCategory
             : state?.brands
-          ).map((name) => (
+          )?.map((name) => (
             <MenuItem key={name} value={name}>
               <Checkbox checked={item.indexOf(name) > -1} />
               <ListItemText primary={name} />
