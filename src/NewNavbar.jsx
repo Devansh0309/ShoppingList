@@ -99,59 +99,65 @@ function NewNavbar() {
   // }, []);
 
   useEffect(() => {
-    
-        let products = state?.products
-        
-        let categories = [];
-        let brands = [];
-        for (let i = 0; i < products.length; i++) {
-          categories[i] = products[i].category;
-          brands[i] = products[i].brand;
-        }
-        const uniqueCategories = Array.from(new Set(categories));
-        const uniqueBrands = Array.from(new Set(brands));
-        let mapBrandsToCategories = {};
+    let products = state?.products;
 
-        for (let i = 0; i < uniqueCategories.length; i++) {
-          let categoryBrands = [];
-          for (let j = 0; j < products.length; j++) {
-            if (products[j]?.category === uniqueCategories[i]) {
-              categoryBrands.push(products[j]?.id);
-            }
-          }
-          // let categoryBrands=products.filter((item)=>{
-          //     if(item["category"]===uniqueCategories[i]){
-          //         const brand=item.brand
-          //         console.log(brand)
-          //         return brand
-          //     }
-          // })
-          //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
-          // console.log(categoryBrands)
-          mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
-        }
+    let categories = [];
+    let brands = [];
+    for (let i = 0; i < products.length; i++) {
+      categories[i] = products[i].category;
+      brands[i] = products[i].brand;
+    }
+    const uniqueCategories = Array.from(new Set(categories));
+    const uniqueBrands = Array.from(new Set(brands));
+    let mapBrandsToCategories = {};
 
-        let cartItems=state?.cartItems
-        let bill=state?.billAmount
-        for(let id in cartItems){
-          if(products[id-1].stock<cartItems[id]){
-            cartItems[id]=products[id-1].stock
-            bill=bill-(cartItems[id]-products[id-1].stock)
-          }
+    for (let i = 0; i < uniqueCategories.length; i++) {
+      let categoryBrands = [];
+      for (let j = 0; j < products.length; j++) {
+        if (products[j]?.category === uniqueCategories[i]) {
+          categoryBrands.push(products[j]?.id);
         }
-        console.log("mapBrandsToCategories updating","line 147")
-        dispatch({
-          type: "SetStates",
-          payload: {
-           
+      }
+      // let categoryBrands=products.filter((item)=>{
+      //     if(item["category"]===uniqueCategories[i]){
+      //         const brand=item.brand
+      //         console.log(brand)
+      //         return brand
+      //     }
+      // })
+      //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
+      // console.log(categoryBrands)
+      mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
+    }
+
+    let cartItems = state?.cartItems;
+    let bill = state?.billAmount;
+    let changesMadeinCart = false;
+    for (let id in cartItems) {
+      if (products[id - 1].stock < cartItems[id]) {
+        cartItems[id] = products[id - 1].stock;
+        bill = bill - (cartItems[id] - products[id - 1].stock);
+        changesMadeinCart = true;
+      }
+    }
+    console.log("mapBrandsToCategories updating", "line 141");
+    dispatch({
+      type: "SetStates",
+      payload: changesMadeinCart
+        ? {
             categories: uniqueCategories,
             brands: uniqueBrands,
             mapBrandsToCategories: mapBrandsToCategories,
-            cartItems:cartItems,
-            billAmount:bill
+            cartItems: cartItems,
+            billAmount: bill,
+          }
+        : {
+            categories: uniqueCategories,
+            brands: uniqueBrands,
+            mapBrandsToCategories: mapBrandsToCategories,
           },
-        });
-       
+    });
+
     // const dataFromLocal =
     //   typeof window !== "undefined" && window.localStorage
     //     ? localStorage.getItem("states")
@@ -173,7 +179,6 @@ function NewNavbar() {
       }
     };
 
-    // temp();
     temp2();
   }, [state?.products]);
 
@@ -185,7 +190,7 @@ function NewNavbar() {
       sum = sum + cartItems[item];
     }
     setTotalCartItems(sum);
-  }, [state?.cartItems, state?.billAmount]);
+  }, [state?.billAmount]);
 
   return (
     <AppBar position="fixed">
@@ -317,12 +322,19 @@ function NewNavbar() {
           {/* Avatar */}
           <Box sx={{ flexGrow: 0 }}>
             {state?.userType === "admin" ? (
-              <Button variant="container" onClick={()=>{dispatch({
-                type: "SetStates",
-                payload: {
-                  openModal : true
-                },
-              })}}>Add product</Button>
+              <Button
+                variant="container"
+                onClick={() => {
+                  dispatch({
+                    type: "SetStates",
+                    payload: {
+                      openModal: true,
+                    },
+                  });
+                }}
+              >
+                Add product
+              </Button>
             ) : null}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

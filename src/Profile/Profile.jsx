@@ -14,6 +14,7 @@ function Profile() {
     // console.log("inside 2nd useEffect in navbar")
     if (state?.cartItems && Object.keys(state?.cartItems)?.length > 0) {
       let cartItems = state?.cartItems;
+      console.log("line 17", "cartItems updating", state?.cartItems);
       const itemsSelectedIds = Object.keys(cartItems)?.filter((id) => {
         if (state?.cartItems[id] > 0) {
           return id;
@@ -21,13 +22,13 @@ function Profile() {
       });
       setCartItemsIds(itemsSelectedIds);
 
-      let sum = 0;
-      for (let item in cartItems) {
-        sum = sum + cartItems[item];
-      }
-      setTotalCartItems(sum);
+      // let sum = 0;
+      // for (let item in cartItems) {
+      //   sum = sum + cartItems[item];
+      // }
+      // setTotalCartItems(sum);
     }
-  }, [state?.cartItems, state?.billAmount]);
+  }, [state?.billAmount]);
 
   // useEffect(() => {
   //   if (cartItemsIds?.length > 0) {
@@ -46,7 +47,7 @@ function Profile() {
                 return (
                   <div className="product">
                     <div className="product-top-content">
-                      <p>{state?.products[item-1]?.title}</p>
+                      <p>{state?.products[item - 1]?.title}</p>
                       <button
                         className="close-btn"
                         onClick={() => {
@@ -54,7 +55,7 @@ function Profile() {
                           let cartItems = state?.cartItems;
                           billAmount =
                             billAmount -
-                            (cartItems[item] * state?.products[item-1]?.price);
+                            cartItems[item] * state?.products[item - 1]?.price;
 
                           cartItems[item] = 0;
 
@@ -72,7 +73,7 @@ function Profile() {
                     </div>
                     <div className="product-bottom-content">
                       {state?.cartItems[item]}Pieces | Rs.
-                      {state?.products[item-1]?.price}
+                      {state?.products[item - 1]?.price}
                     </div>
                     <hr />
                   </div>
@@ -91,46 +92,71 @@ function Profile() {
               const docRef = doc(db, "products", "l8FKZZhmlnEbGTnWy65n");
 
               const temp = async () => {
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                  console.log("line 96")
-                  const data = docSnap.data();
-                  let products = [];
-                  products = data["$return_value"];
-                  let billAmount = state?.billAmount;
-                  let cartItems = state?.cartItems;
-                  for (let item of cartItemsIds) {
-                    console.log("bill: ",billAmount,"line 103")
-                    billAmount =
-                      billAmount -
-                      (cartItems[item] * products[item-1]?.price);
-                    console.log("bill: ",billAmount,"line 107")
-                    let stock = products[item - 1]?.stock;
-                    // console.log(stock, "line 101 purchase in profile");
-                    products[item - 1].stock = stock - cartItems[item];
-                    cartItems[item] = 0;
-                    console.log(products[item - 1].stock,cartItems[item],stock, "line 111 purchase in profile");
-                  }
-
-                  // console.log(products,"line 113",cartItems)
-                 
-
-                  await updateDoc(docRef, {
-                    $return_value: products,
-                  }).then(()=>{
-                    console.log("line 115", "doc updated")
-                    dispatch({
-                      type: "SetStates",
-                      payload: {
-                        cartItems: cartItems,
-                        billAmount: billAmount,
-                      }
-                    })
-                    }).catch((err)=>{
-                    console.log("line 123",err)
-                  })
-
+                // const docSnap = await getDoc(docRef);
+                // if (docSnap.exists()) {
+                console.log("line 96");
+                // const data = docSnap.data();
+                let products = state?.products;
+                // products = data["$return_value"];
+                let billAmount = state?.billAmount;
+                let cartItems = state?.cartItems;
+                for (let item of cartItemsIds) {
+                  console.log("bill: ", billAmount, "line 103");
+                  billAmount =
+                    billAmount - cartItems[item] * products[item - 1]?.price;
+                  console.log("bill: ", billAmount, "line 107");
+                  let stock = products[item - 1]?.stock;
+                  // console.log(stock, "line 101 purchase in profile");
+                  products[item - 1].stock = stock - cartItems[item];
+                  cartItems[item] = 0;
+                  console.log(
+                    products[item - 1].stock,
+                    cartItems[item],
+                    stock,
+                    "line 111 purchase in profile"
+                  );
                 }
+                console.log(
+                  "line 120",
+                  "doc updated",
+                  "cartItems= ",
+                  cartItems,
+                  "billAmount ",
+                  billAmount
+                );
+                // console.log(products,"line 113",cartItems)
+                dispatch({
+                  type: "SetStates",
+                  payload: {
+                    billAmount: billAmount,
+                    cartItems: cartItems,
+                  },
+                });
+                console.log(
+                  "line 129",
+                  "doc updated",
+                  "cartItems= ",
+                  state?.cartItems,
+                  "billAmount ",
+                  state?.billAmount
+                );
+                await updateDoc(docRef, {
+                  $return_value: products,
+                })
+                  .then(() => {
+                    console.log(
+                      "line 115",
+                      "doc updated",
+                      "cartItems= ",
+                      state?.cartItems,
+                      "billAmount ",
+                      state?.billAmount
+                    );
+                  })
+                  .catch((err) => {
+                    console.log("line 123", err);
+                  });
+                // }
               };
               temp();
             }
