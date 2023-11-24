@@ -8,7 +8,7 @@ import { useRef } from "react";
 
 function Products() {
   const [state, dispatch] = useContext(ShoppingContext);
-  const [categoriesAndBrandsMap, setCategoriesAndBrandsMap] = useState([]);
+  const [categoriesAndBrandsMap, setCategoriesAndBrandsMap] = useState({});
   const typeOfChange = useRef("");
 
   useEffect(() => {

@@ -118,15 +118,6 @@ function NewNavbar() {
           categoryBrands.push(products[j]?.id);
         }
       }
-      // let categoryBrands=products.filter((item)=>{
-      //     if(item["category"]===uniqueCategories[i]){
-      //         const brand=item.brand
-      //         console.log(brand)
-      //         return brand
-      //     }
-      // })
-      //   const uniqueCategoryBrands = Array.from(new Set(categoryBrands));
-      // console.log(categoryBrands)
       mapBrandsToCategories[uniqueCategories[i]] = categoryBrands;
     }
 
@@ -190,7 +181,7 @@ function NewNavbar() {
       sum = sum + cartItems[item];
     }
     setTotalCartItems(sum);
-  }, [state?.billAmount]);
+  }, [state?.billAmount,state?.cartItems]);
 
   return (
     <AppBar position="fixed">

@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import UserContexts from "./Contexts";
 import NewNavbar from "./NewNavbar";
 import Products from "./Products/Products";
@@ -10,7 +10,7 @@ import ProductModal from "./elements/Modal";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      
         <Routes>
           <Route
             path="/"
@@ -33,7 +33,6 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }
