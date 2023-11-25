@@ -24,15 +24,40 @@ function SignIn({ handleCloseUserMenu }) {
         const user = result.user.uid;
         console.log(user);
         if (state?.admin?.includes(user)) {
-          dispatch({
-            type: "SetStates",
-            payload: { userType: "admin", openModal : true },
-          });
-        } else {
+
+          if (!state?.uid || state?.uid !== user) {
+            let cartItems = {};
+            for (let product of state?.products) {
+              cartItems[product.id] = 0;
+            }
+            dispatch({
+              type: "SetStates",
+              payload: {
+                userType: "admin",
+                openModal: true,
+                cartItems: cartItems,
+                billAmount: 0,
+                uid: user,
+              },
+            });
+          } else {
+            dispatch({
+              type: "SetStates",
+              payload: { userType: "admin", openModal: true },
+            });
+          }
+          
+        } else if (!state?.uid || state?.uid !== user) {
+
+          let cartItems = {};
+          for (let product of state?.products) {
+            cartItems[product.id] = 0;
+          }
           dispatch({
             type: "SetStates",
             payload: { userType: "customer" },
           });
+
           const temp = async () => {
             const docRef = doc(db, "products", "customers");
             const docSnap = await getDoc(docRef);
@@ -43,15 +68,17 @@ function SignIn({ handleCloseUserMenu }) {
               if (!data[user]) {
                 await updateDoc(docRef, {
                   [user]: {
-                    // billAmount: state?.billAmount,
-                    // cartItems: state?.cartItems,
                     uid: user,
                   },
                 });
               }
               dispatch({
                 type: "SetStates",
-                payload: { uid: user},
+                payload: {
+                  cartItems: cartItems,
+                  billAmount: 0,
+                  uid: user,
+                },
               });
             } else {
               // docSnap.data() will be undefined in this case
@@ -59,6 +86,11 @@ function SignIn({ handleCloseUserMenu }) {
             }
           };
           temp();
+        } else {
+          dispatch({
+            type: "SetStates",
+            payload: { userType: "customer" },
+          });
         }
         // IdP data available using getAdditionalUserInfo(result)
         // ...

@@ -21,12 +21,12 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
 import SignIn from "./Auth/SigIn";
 import { useNavigate } from "react-router-dom";
-// import ProductModal from "./elements/Modal";
 
 function NewNavbar() {
   // console.log(signIn);
   const [state, dispatch] = useContext(ShoppingContext);
   const navigate = useNavigate();
+
   const [pages, setPages] = useState([
     // { title: "Add Product", logo: <BiSolidCategory /> },
     { title: "Categories", logo: <BiSolidCategory /> },
@@ -72,34 +72,10 @@ function NewNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  // useEffect(() => {
-  //   if (!state?.toggleDrawer) {
-  //     console.log("toggle-drawer");
-  //     const toggleDrawer = (anchor, open) => (event) => {
-  //       if (
-  //         event.type === "keydown" &&
-  //         (event.key === "Tab" || event.key === "Shift")
-  //       ) {
-  //         return;
-  //       }
-  //       dispatch({
-  //         type: "SetStates",
-  //         payload: {
-  //           drawerState: { ...state?.drawerState, [anchor]: open },
-  //         },
-  //       });
-  //     };
-  //     dispatch({
-  //       type: "SetStates",
-  //       payload: {
-  //         toggleDrawer: toggleDrawer,
-  //       },
-  //     });
-  //   }
-  // }, []);
+ 
 
   useEffect(() => {
-    console.log("inside 1st useEffewct","line 102")
+    // console.log("inside 1st useEffewct","line 102")
     let products = state?.products;
 
     let categories = [];
@@ -175,7 +151,7 @@ function NewNavbar() {
   }, [state?.products]);
 
   useEffect(() => {
-    console.log("inside 2nd useEffect in navbar")
+    // console.log("inside 2nd useEffect in navbar")
     let cartItems = state?.cartItems;
     let sum = 0;
     for (let item in cartItems) {
@@ -397,4 +373,5 @@ function NewNavbar() {
     </AppBar>
   );
 }
+
 export default NewNavbar;

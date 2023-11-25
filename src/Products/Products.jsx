@@ -57,6 +57,7 @@ function Products() {
   }, []);
 
   useEffect(() => {
+    
     if (state?.cartItems && Object.keys(state?.cartItems)?.length === 0) {
       let cartItems = {};
       for (let product of state?.products) {
