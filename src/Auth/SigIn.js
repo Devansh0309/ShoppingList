@@ -21,9 +21,12 @@ function SignIn({ handleCloseUserMenu }) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
+        console.log(result)
         const user = result.user.uid;
-        console.log(user);
-        if (state?.admin?.includes(user)) {
+        const adminEmail = result.user.email
+        let admins = Object.keys(state?.admin)
+        // console.log(user);
+        if (admins.includes(adminEmail)) {
 
           if (!state?.uid || state?.uid !== user) {
             let cartItems = {};
