@@ -199,10 +199,11 @@ function NewNavbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
+                
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu} sx={{ my: 2, display: "flex", backgroundColor:"#1976d2" }}>
                   {page?.title === "Categories" || page?.title === "Brands" ? (
                     <MultipleSelectCheckmarks
                       icon={page.logo}
@@ -212,7 +213,6 @@ function NewNavbar() {
                       setBrandsForSelectedCategory={
                         setBrandsForSelectedCategory
                       }
-                      // setBrandsSelected={setBrandsSelected}
                     />
                   ) : (
                     <div
