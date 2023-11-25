@@ -42,22 +42,29 @@ export default function MultipleSelectCheckmarks({
   useEffect(() => {
     if (title === "Categories") {
       let brandsForCategory = [];
-      for (let i = 0; i < item.length; i++) {
-        let brandsForId=[]
-        for(let j of state?.mapBrandsToCategories[item[i]]){
-            brandsForId.push(state?.products[j-1]?.brand)
-        }
-        brandsForCategory = [
-          ...brandsForCategory,
-          ...brandsForId,
-        ];
-      }
-
       let mapSelectedBrandsForCategories = {};
       const brandsForCategoriesMap = state?.mapBrandsToCategories;
+      const brandsSelected = state?.brandsSelected;
+
       for (let i = 0; i < item.length; i++) {
-        mapSelectedBrandsForCategories[item[i]] =
-          brandsForCategoriesMap[item[i]];
+        let brandsForId = [];
+        let productsIdsForSelectedBrands = [];
+        for (let j of brandsForCategoriesMap[item[i]]) {
+          brandsForId.push(state?.products[j - 1]?.brand);
+          if (brandsSelected?.includes(state?.products[j - 1]?.brand)) {
+            productsIdsForSelectedBrands = [...productsIdsForSelectedBrands, j];
+          }
+        }
+
+        if (productsIdsForSelectedBrands.length === 0) {
+          mapSelectedBrandsForCategories[item[i]] =
+            brandsForCategoriesMap[item[i]];
+        } else {
+          mapSelectedBrandsForCategories[item[i]] =
+            productsIdsForSelectedBrands;
+        }
+
+        brandsForCategory = [...brandsForCategory, ...brandsForId];
       }
 
       dispatch({
@@ -71,21 +78,27 @@ export default function MultipleSelectCheckmarks({
     } else {
       let mapSelectedBrandsForCategories = {};
       const brandsForCategoriesMap = state?.mapBrandsToCategories;
-      for (let key in brandsForCategoriesMap) { //key is category
+      for (let key in brandsForCategoriesMap) {
+        //key is category
 
-        let brandsForId=[]//brandsForCategory is array for unique brands for a category-key
-        for(let j of brandsForCategoriesMap[key]){
-            brandsForId.push(state?.products[j-1]?.brand)
+        let brandsForId = []; //brandsForCategory is array for unique brands for a category-key
+        for (let j of brandsForCategoriesMap[key]) {
+          brandsForId.push(state?.products[j - 1]?.brand);
         }
-        brandsForId=Array.from(new Set(brandsForId))
+        brandsForId = Array.from(new Set(brandsForId));
 
-        for (let i = 0; i < item.length; i++) { //item is arr of selected brands
+        for (let i = 0; i < item.length; i++) {
+          //item is arr of selected brands
           if (brandsForId?.includes(item[i])) {
-            let IdForCategoryBrand=[]
-            for(let k=1;k<=state?.products?.length;k++){  // k is id of product
-                if(state?.products[k-1]?.category === key && state?.products[k-1]?.brand === item[i]){
-                    IdForCategoryBrand.push(k) // k is id of product having category-key and brand-item[i]
-                }
+            let IdForCategoryBrand = [];
+            for (let k = 1; k <= state?.products?.length; k++) {
+              // k is id of product
+              if (
+                state?.products[k - 1]?.category === key &&
+                state?.products[k - 1]?.brand === item[i]
+              ) {
+                IdForCategoryBrand.push(k); // k is id of product having category-key and brand-item[i]
+              }
             }
             // console.log(key,item)
             if (mapSelectedBrandsForCategories[key]?.length > 0) {
