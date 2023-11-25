@@ -21,7 +21,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
 import SignIn from "./Auth/SigIn";
 import { useNavigate } from "react-router-dom";
-import ProductModal from "./elements/Modal";
+// import ProductModal from "./elements/Modal";
 
 function NewNavbar() {
   // console.log(signIn);
@@ -99,6 +99,7 @@ function NewNavbar() {
   // }, []);
 
   useEffect(() => {
+    console.log("inside 1st useEffewct","line 102")
     let products = state?.products;
 
     let categories = [];
@@ -131,7 +132,7 @@ function NewNavbar() {
         changesMadeinCart = true;
       }
     }
-    console.log("mapBrandsToCategories updating", "line 141");
+    console.log("mapBrandsToCategories updating", "line 135");
     dispatch({
       type: "SetStates",
       payload: changesMadeinCart
@@ -174,7 +175,7 @@ function NewNavbar() {
   }, [state?.products]);
 
   useEffect(() => {
-    // console.log("inside 2nd useEffect in navbar")
+    console.log("inside 2nd useEffect in navbar")
     let cartItems = state?.cartItems;
     let sum = 0;
     for (let item in cartItems) {
@@ -360,7 +361,14 @@ function NewNavbar() {
                       <Typography
                         textAlign="center"
                         onClick={() => {
-                          window.open("/profile", "rel=noopener noreferrer");
+                          dispatch({
+                            type: "SetStates",
+                            payload: {
+                              drawerState: { ...state?.drawerState, right: true },
+                            },
+                          });
+                          handleCloseUserMenu();
+                          // window.open("/profile", "rel=noopener noreferrer");
                         }}
                       >
                         {item.title}

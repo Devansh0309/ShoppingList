@@ -21,7 +21,8 @@ function Profile() {
         state?.cartItems,
         state?.billAmount
       );
-      const itemsSelectedIds = Object.keys(cartItems)?.filter((id) => {
+      const productsIds=Object.keys(cartItems)
+      const itemsSelectedIds = productsIds?.filter((id) => {
         if (state?.cartItems[id] > 0) {
           return id;
         }
@@ -31,7 +32,14 @@ function Profile() {
     }
   }, [state?.billAmount,state?.cartItems]);
 
-  
+  useEffect(()=>{
+
+    if(cartItemsIds?.length>0){
+      console.log("cartItemsIds: ",cartItemsIds)
+    }
+
+  },[cartItemsIds])
+
   return (
     <div className="user-profile">
       <div className="products-in-cart-and-heading">
@@ -42,7 +50,7 @@ function Profile() {
           // Object.keys(state?.cartItems)?.length > 0 &&
           // cartItemsIds?.length > 0
           //   ? 
-            cartItemsIds?.map((item) => {
+            cartItemsIds.map((item) => {
                 return (
                   <div className="product" key={item}>
                     <div className="product-top-content">

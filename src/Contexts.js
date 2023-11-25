@@ -22,13 +22,10 @@ const initialState = {
   cartItems: states ? states.cartItems : {},
   billAmount: states ? states.billAmount : 0,
   admin: states ? states.admin : [],
-  toggleDrawer: states ? states.toggleDrawer : null,
+  // toggleDrawer: states ? states.toggleDrawer : null,
   drawerState: states
     ? states.drawerState
     : {
-        top: false,
-        left: false,
-        bottom: false,
         right: false,
       },
   openModal: states? states.openModal : false,

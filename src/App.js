@@ -18,8 +18,9 @@ function App() {
               <UserContexts>
                 <NewNavbar/>
                 <Products/>
+                {/* <Profile/> */}
                 <ProductModal/>
-                {/* <TemporaryDrawer/> */}
+                <TemporaryDrawer/>
               </UserContexts>
             }
           />
@@ -27,7 +28,6 @@ function App() {
             path="/profile"
             element={
               <UserContexts>
-                {/* <NewNavbar/> */}
                 <Profile/>
               </UserContexts>
             }
