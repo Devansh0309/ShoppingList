@@ -24,7 +24,7 @@ function SignIn({ handleCloseUserMenu }) {
         console.log(result)
         const user = result.user.uid;
         const adminEmail = result.user.email
-        let admins = state?.admin?.emails
+        let admins = state?.admin
         // console.log(user);
         if (admins?.includes(adminEmail)) {
 

@@ -141,7 +141,7 @@ function NewNavbar() {
         dispatch({
           type: "SetStates",
           payload: {
-            admin: data,
+            admin: data?.emails,
           },
         });
       }
