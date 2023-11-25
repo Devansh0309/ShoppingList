@@ -24,9 +24,9 @@ function SignIn({ handleCloseUserMenu }) {
         console.log(result)
         const user = result.user.uid;
         const adminEmail = result.user.email
-        let admins = Object.keys(state?.admin)
+        let admins = state?.admin?.emails
         // console.log(user);
-        if (admins.includes(adminEmail)) {
+        if (admins?.includes(adminEmail)) {
 
           if (!state?.uid || state?.uid !== user) {
             let cartItems = {};
