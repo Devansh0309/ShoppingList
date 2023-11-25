@@ -4,7 +4,6 @@ import UserContexts from "./Contexts";
 import NewNavbar from "./NewNavbar";
 import Products from "./Products/Products";
 import TemporaryDrawer from "./elements/Drawer";
-import Profile from "./Profile/Profile";
 import ProductModal from "./elements/Modal";
 
 function App() {
@@ -18,17 +17,9 @@ function App() {
               <UserContexts>
                 <NewNavbar/>
                 <Products/>
-                {/* <Profile/> */}
+                
                 <ProductModal/>
                 <TemporaryDrawer/>
-              </UserContexts>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <UserContexts>
-                <Profile/>
               </UserContexts>
             }
           />
