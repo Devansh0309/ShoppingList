@@ -356,8 +356,7 @@ function NewNavbar() {
                       <SignIn handleCloseUserMenu={handleCloseUserMenu} />
                     )
                   ) : state?.userType ? (
-                    item?.title === "Profile" &&
-                    state?.userType === "customer" ? (
+                    item?.title === "Profile"? (
                       <Typography
                         textAlign="center"
                         onClick={() => {
