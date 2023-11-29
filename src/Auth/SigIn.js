@@ -21,7 +21,7 @@ function SignIn({ handleCloseUserMenu }) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
-        console.log(result)
+        // console.log(result)
         const user = result.user.uid;
         const adminEmail = result.user.email
         let admins = state?.admin
@@ -49,7 +49,7 @@ function SignIn({ handleCloseUserMenu }) {
               payload: { userType: "admin", openModal: true },
             });
           }
-          
+          alert("Logged in as admin!")
         } else if (!state?.uid || state?.uid !== user) {
 
           let cartItems = {};
@@ -83,9 +83,11 @@ function SignIn({ handleCloseUserMenu }) {
                   uid: user,
                 },
               });
+              alert("Logged in!")
             } else {
               // docSnap.data() will be undefined in this case
               console.log("No such document!");
+              alert("Some error!")
             }
           };
           temp();
@@ -94,9 +96,11 @@ function SignIn({ handleCloseUserMenu }) {
             type: "SetStates",
             payload: { userType: "customer" },
           });
+          alert("Logged in!")
         }
         // IdP data available using getAdditionalUserInfo(result)
         // ...
+        
       })
       .catch((error) => {
         // Handle Errors here.

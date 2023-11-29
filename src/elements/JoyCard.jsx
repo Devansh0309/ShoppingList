@@ -81,7 +81,7 @@ export default function ProductCard({
               </Button>
             ) : null}
             {state?.cartItems[id] > 0 ? state?.cartItems[id] : null}
-            <Button
+            {state?.cartItems[id] < stock ?<Button
               variant="solid"
               color="danger"
               size="lg"
@@ -103,7 +103,7 @@ export default function ProductCard({
               }}
             >
               +
-            </Button>
+            </Button>:null}
           </div>
         ) : (
           <h4>Out of Stock</h4>

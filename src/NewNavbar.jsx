@@ -20,12 +20,12 @@ import { ShoppingContext } from "./Contexts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
 import SignIn from "./Auth/SigIn";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function NewNavbar() {
   // console.log(signIn);
   const [state, dispatch] = useContext(ShoppingContext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [pages, setPages] = useState([
     // { title: "Add Product", logo: <BiSolidCategory /> },
@@ -72,7 +72,6 @@ function NewNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
- 
 
   useEffect(() => {
     // console.log("inside 1st useEffewct","line 102")
@@ -158,7 +157,7 @@ function NewNavbar() {
       sum = sum + cartItems[item];
     }
     setTotalCartItems(sum);
-  }, [state?.billAmount,state?.cartItems]);
+  }, [state?.billAmount, state?.cartItems]);
 
   return (
     <AppBar position="fixed">
@@ -199,11 +198,14 @@ function NewNavbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
-                
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu} sx={{ my: 2, display: "flex", backgroundColor:"#1976d2" }}>
+                <MenuItem
+                  key={page.title}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, display: "flex", backgroundColor: "#1976d2" }}
+                >
                   {page?.title === "Categories" || page?.title === "Brands" ? (
                     <MultipleSelectCheckmarks
                       icon={page.logo}
@@ -225,6 +227,16 @@ function NewNavbar() {
                         alignItems: "center",
                         columnGap: "10px",
                         padding: "5px",
+                      }}
+                      onClick={() => {
+                        dispatch({
+                          type: "SetStates",
+                          payload: {
+                            drawerState: { ...state?.drawerState, right: true },
+                          },
+                        });
+                        handleCloseUserMenu();
+                        // window.open("/profile", "rel=noopener noreferrer");
                       }}
                     >
                       <span>{page?.logo}</span>
@@ -274,7 +286,16 @@ function NewNavbar() {
                       columnGap: "10px",
                       padding: "5px",
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      dispatch({
+                        type: "SetStates",
+                        payload: {
+                          drawerState: { ...state?.drawerState, right: true },
+                        },
+                      });
+                      handleCloseUserMenu();
+                      // window.open("/profile", "rel=noopener noreferrer");
+                    }}
                   >
                     <span>{page?.logo}</span>
                     <span>
@@ -327,19 +348,18 @@ function NewNavbar() {
             >
               {userItems.map((item) => (
                 <MenuItem key={item.title}>
-                  {item?.title === "Login" ? (
-                    state?.userType ? null : (
-                      <SignIn handleCloseUserMenu={handleCloseUserMenu} />
-                    )
-                  ) : state?.userType ? (
-                    item?.title === "Profile"? (
+                  {state?.userType ? (
+                    item?.title === "Profile" ? (
                       <Typography
                         textAlign="center"
                         onClick={() => {
                           dispatch({
                             type: "SetStates",
                             payload: {
-                              drawerState: { ...state?.drawerState, right: true },
+                              drawerState: {
+                                ...state?.drawerState,
+                                right: true,
+                              },
                             },
                           });
                           handleCloseUserMenu();
@@ -348,7 +368,7 @@ function NewNavbar() {
                       >
                         {item.title}
                       </Typography>
-                    ) : (
+                    ) : item?.title === "Login" ? null : (
                       <Typography
                         textAlign="center"
                         onClick={() => {
@@ -357,12 +377,15 @@ function NewNavbar() {
                           };
                           callActionTodo();
                           handleCloseUserMenu();
-                          navigate("/");
+                          // navigate("/");
+                          alert("Logged out!");
                         }}
                       >
                         {item.title}
                       </Typography>
                     )
+                  ) : item?.title === "Login" ? (
+                    <SignIn handleCloseUserMenu={handleCloseUserMenu} />
                   ) : null}
                 </MenuItem>
               ))}
