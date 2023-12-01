@@ -229,12 +229,14 @@ function NewNavbar() {
                         padding: "5px",
                       }}
                       onClick={() => {
-                        dispatch({
-                          type: "SetStates",
-                          payload: {
-                            drawerState: { ...state?.drawerState, right: true },
-                          },
-                        });
+                        if(state?.userType){
+                          dispatch({
+                            type: "SetStates",
+                            payload: {
+                              drawerState: { ...state?.drawerState, right: true },
+                            },
+                          });
+                        }
                         handleCloseUserMenu();
                         // window.open("/profile", "rel=noopener noreferrer");
                       }}
@@ -287,12 +289,15 @@ function NewNavbar() {
                       padding: "5px",
                     }}
                     onClick={() => {
-                      dispatch({
-                        type: "SetStates",
-                        payload: {
-                          drawerState: { ...state?.drawerState, right: true },
-                        },
-                      });
+                      if(state?.userType){
+                        dispatch({
+                          type: "SetStates",
+                          payload: {
+                            drawerState: { ...state?.drawerState, right: true },
+                          },
+                        });
+                      }
+                      
                       handleCloseUserMenu();
                       // window.open("/profile", "rel=noopener noreferrer");
                     }}
