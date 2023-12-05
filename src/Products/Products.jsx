@@ -88,7 +88,7 @@ function Products() {
                 style={{
                   fontWeight: "200",
                   textDecoration: "underline",
-                  textDecorationThickness: "1px",
+                  textDecorationThickness: "2px",
                   textDecorationColor: "#1976d2",
                 }}
               >

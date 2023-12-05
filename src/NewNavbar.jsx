@@ -160,7 +160,7 @@ function NewNavbar() {
   }, [state?.billAmount, state?.cartItems]);
 
   return (
-    <AppBar position="fixed" sx={{maxHeight:"116px"}}>
+    <AppBar position="fixed" sx={{maxHeight:"116px",width:"100%"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* For mobile */}
