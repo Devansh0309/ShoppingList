@@ -89,7 +89,7 @@ function Profile() {
       </div>
       <div className="bottom-content">
         <div className="bill-info">Total: Rs.{state?.billAmount}</div>
-        {"|"}
+        <span>{"|"} </span>
         <div
           className="purchase-items"
           onClick={() => {

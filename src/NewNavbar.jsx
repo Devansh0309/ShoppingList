@@ -19,7 +19,7 @@ import MultipleSelectCheckmarks from "./elements/MultipleSelect";
 import { ShoppingContext } from "./Contexts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfigs/firebaseConfigs";
-import SignIn from "./Auth/SigIn";
+import SignIn from "./Auth/SignIn";
 // import { useNavigate } from "react-router-dom";
 
 function NewNavbar() {
@@ -160,7 +160,7 @@ function NewNavbar() {
   }, [state?.billAmount, state?.cartItems]);
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{maxHeight:"116px"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* For mobile */}

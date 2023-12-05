@@ -10,10 +10,11 @@
 }
 .products-in-cart-and-heading{
     width:100%;
+    padding-left:10px;
 
 }
 .products-in-cart{
-    width:50%;
+    width:80%;
     margin: auto;
     padding-left: 20px;
     padding-right:10px;
@@ -43,7 +44,8 @@
 .bottom-content{
     margin-top: 20px;
     display: flex;
-    column-gap: 5px;
+    column-gap: 10px;
     justify-content: center;
     align-items: center;
+    padding-left:10px;
 }

@@ -9,7 +9,6 @@ import ProductModal from "./elements/Modal";
 function App() {
   return (
     <div className="App">
-      
         <Routes>
           <Route
             path="/"
@@ -17,7 +16,6 @@ function App() {
               <UserContexts>
                 <NewNavbar/>
                 <Products/>
-                
                 <ProductModal/>
                 <TemporaryDrawer/>
               </UserContexts>

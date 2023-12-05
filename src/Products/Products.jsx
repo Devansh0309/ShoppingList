@@ -14,42 +14,36 @@ function Products() {
   useEffect(() => {
     const q = query(collection(db, "products"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      console.log("update in real-time")
-      let changes = querySnapshot.docChanges()
-      let products
+      console.log("update in real-time");
+      let changes = querySnapshot.docChanges();
+      let products;
       changes.forEach((item) => {
-        console.log("snapshot item",item)
-        
-        if(item?.doc?.id==="l8FKZZhmlnEbGTnWy65n"){
+        console.log("snapshot item", item);
 
-          typeOfChange.current = item?.type
-          products=item?.doc?.data()?.$return_value
-        
+        if (item?.doc?.id === "l8FKZZhmlnEbGTnWy65n") {
+          typeOfChange.current = item?.type;
+          products = item?.doc?.data()?.$return_value;
         }
-        
       });
 
-      if (
-        !state.changesAdded
-      ) {
+      if (!state.changesAdded) {
         dispatch({
           type: "SetStates",
           payload: {
             changesAdded: true,
-            products:products
+            products: products,
           },
-        })
-      }
-      else if (
+        });
+      } else if (
         typeOfChange.current === "modified" ||
-        typeOfChange.current === "removed")
-      {
+        typeOfChange.current === "removed"
+      ) {
         dispatch({
           type: "SetStates",
           payload: {
-            products:products
+            products: products,
           },
-        })
+        });
       }
 
       // console.log("Current cities in CA: ", cities.join(", "));
@@ -57,13 +51,12 @@ function Products() {
   }, []);
 
   useEffect(() => {
-    
     if (state?.cartItems && Object.keys(state?.cartItems)?.length === 0) {
       let cartItems = {};
       for (let product of state?.products) {
         cartItems[product.id] = 0;
       }
-      console.log("line 67 in product.jsx cartItems updating")
+      console.log("line 67 in product.jsx cartItems updating");
       dispatch({
         type: "SetStates",
         payload: {
@@ -84,19 +77,30 @@ function Products() {
       setCategoriesAndBrandsMap(state?.mapBrandsToCategories);
     }
   }, [state?.mapBrandsToCategories, state?.mapSelectedBrandsToCategories]);
-  
+
   return (
     <div className="products-container">
       {Object.keys(categoriesAndBrandsMap)?.map((item) => {
         return (
           <div className="category-products-container" key={item}>
             <h2 className="category-heading">
-              Shop {"->"} {item}
+              <span
+                style={{
+                  fontWeight: "200",
+                  textDecoration: "underline",
+                  textDecorationThickness: "1px",
+                  textDecorationColor: "#1976d2",
+                }}
+              >
+                Shop
+              </span>
+              {"   "}
+              <span style={{ color: "#1976d2" }}>{item}</span>
             </h2>
             <div className="cards-container">
               {Object.values(categoriesAndBrandsMap[item])?.map((item2) => (
                 <ProductCard
-                  photo={state?.products[item2-1]?.images[0]}
+                  photo={state?.products[item2 - 1]?.images[0]}
                   title={state?.products[item2 - 1]?.title}
                   brand={state?.products[item2 - 1]?.brand}
                   description={state?.products[item2 - 1]?.description}

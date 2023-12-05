@@ -13,27 +13,21 @@ export default function TemporaryDrawer() {
   }, [state?.drawerState]);
 
   return (
-    <div>
-      {["right"].map((anchor) => (
-        <div key={anchor}>
-          
-          <Drawer
-            anchor={anchor}
-            open={drawerState[anchor]}
-            onClose={() => {
-              dispatch({
-                type: "SetStates",
-                payload: {
-                  drawerState: { ...state?.drawerState, right: false },
-                },
-              });
-              setDrawerState({ ...drawerState, right: false });
-            }}
-          >
-            <Profile/>
-          </Drawer>
-        </div>
-      ))}
-    </div>
+    <Drawer
+      
+      anchor={"right"}
+      open={drawerState["right"]}
+      onClose={() => {
+        dispatch({
+          type: "SetStates",
+          payload: {
+            drawerState: { ...state?.drawerState, right: false },
+          },
+        });
+        setDrawerState({ ...drawerState, right: false });
+      }}
+    >
+      <Profile />
+    </Drawer>
   );
 }
